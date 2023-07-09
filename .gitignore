@@ -1,0 +1,8 @@
+.python-version
+venv/
+
+node_modules/
+
+*.css.map
+
+public/main.css

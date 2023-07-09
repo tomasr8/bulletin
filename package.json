@@ -1,0 +1,18 @@
+{
+  "name": "bulletin",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "sass --no-source-map styles/main.scss public/main.css",
+    "sass:watch": "sass -w styles/main.scss public/main.css"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "connect-livereload": "^0.6.1",
+    "express": "^4.18.2",
+    "livereload": "^0.9.3",
+    "sass": "^1.63.6"
+  }
+}

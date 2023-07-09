@@ -1,0 +1,112 @@
+body,
+html {
+  padding: 0;
+  margin: 0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.nav {
+  border-bottom: 1px solid rgba(128, 128, 128, 0.212);
+}
+
+.main {
+  margin-top: 1em;
+}
+
+.viewer {
+  width: 700px;
+  height: 500px;
+  resize: both;
+  overflow: auto;
+
+  object {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.timeline {
+  padding: 1em 0 0 2em;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  // max-height: 100vh;
+  overflow-y: auto;
+
+  .year {
+    // border-left: 0.3em solid purple;
+
+    .header {
+      cursor: pointer;
+      display: flex;
+      gap: 2em;
+      align-items: center;
+
+      &:hover .line {
+        background-color: rgba(128, 0, 128, 0.521);
+      }
+
+      &:hover .dot {
+        background-color: rgba(128, 0, 128, 0.521);
+      }
+
+
+      .title {
+        font-size: 1.2em;
+        font-weight: normal;
+      }
+
+      .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background-color: rgba(128, 0, 128, 0.336);;
+      }
+
+      .line {
+        width: 6em;
+        height: 3px;
+        min-height: 3px;
+        background-color: rgba(128, 0, 128, 0.336);
+        border-radius: 2px;
+        position: relative;
+      }
+    }
+
+    .weeks {
+      transition: all 0.35s ease-in-out;
+      display: flex;
+      flex-direction: column;
+      gap: 1em;
+      overflow-y: hidden;
+      height: 0;
+      margin-top: 1em;
+      margin-left: 3px;
+      padding-left: 1em;
+      border-left: 2px dotted purple;
+
+      .week {
+        display: flex;
+        gap: 1.4em;
+        align-items: center;
+        cursor: pointer;
+
+        .title {
+          font-size: 1em;
+          font-weight: normal;
+        }
+
+        .line {
+          width: 6px;
+          min-height: 6px;
+          height: 6px;
+          border-radius: 50%;
+          background-color: purple;
+        }
+      }
+    }
+  }
+}
