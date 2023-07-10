@@ -9,6 +9,12 @@ body {
   min-height: 100vh;
 }
 
+#root {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  min-height: 100vh;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -54,7 +60,9 @@ body {
     flex-wrap: wrap;
     gap: 0.3em;
 
-    .issue {
+    button {
+      flex: 1;
+      max-width: 30%;
     }
   }
 }
