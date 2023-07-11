@@ -9,6 +9,15 @@ export default function Header() {
         <div className="navbar-start">
           <a className="navbar-item">CERN CDS</a>
           <a className="navbar-item">Github</a>
+          <a className="navbar-item" href="/">
+            Explore
+          </a>
+          <a className="navbar-item" href="/history">
+            Cover design
+          </a>
+          <a className="navbar-item" href="/articles">
+            Interesting articles
+          </a>
         </div>
       </div>
     </nav>

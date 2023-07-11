@@ -26,11 +26,12 @@ def parse_title(title):
         return parse_segment(title)
 
 
-def format_segment(year, issues):
+def format_segment(year, issues, ext=True):
     if len(issues) == 1:
-        return f"{str(issues[0]).zfill(2)}-{year}.pdf"
+        segment = f"{str(issues[0]).zfill(2)}-{year}"
     else:
-        return f"{str(issues[0]).zfill(2)}-{str(issues[-1]).zfill(2)}-{year}.pdf"
+        segment = f"{str(issues[0]).zfill(2)}-{str(issues[-1]).zfill(2)}-{year}"
+    return segment if not ext else f"{segment}.pdf"
 
 
 def format_filename(title):
@@ -50,53 +51,58 @@ def process(data):
         print(title, link)
         titles.append(title)
 
+        # if isinstance(title[0], tuple):
+        #     (year1, issues1), (year2, issues2) = title
+        #     if year1 > 1989:
+        #         continue
+
+        #     filename_a, filename_b = format_filename(title)
+        #     text = requests.get(link + f"/files/{filename_a}").content
+
+        #     p = Path(__file__).parent / "../bulletin/public/issues/{year1}" / filename_a
+        #     p.parent.mkdir(parents=True, exist_ok=True)
+        #     p.write_text(text, encoding="utf-8")
+        #     p = Path(__file__).parent / "../bulletin/public/issues/{year2}" / filename_b
+        #     p.parent.mkdir(parents=True, exist_ok=True)
+        #     p.write_text(text, encoding="utf-8")
+        # else:
+        #     year, issues = title
+        #     if year > 1989:
+        #         continue
+        #     if not issues:
+        #         continue
+
+        #     filename = format_filename(title)
+        #     text = requests.get(link + f"/files/{filename}").content
+        #     p = Path(__file__).parent / "../bulletin/public/issues/{year}" / filename
+        #     p.parent.mkdir(parents=True, exist_ok=True)
+        #     p.write_text(text, encoding="utf-8")
+
+        # time.sleep(1)
+
+
+    titles_by_year = defaultdict(list)
+    for title in titles:
         if isinstance(title[0], tuple):
+            # print("TITLE", title)
             (year1, issues1), (year2, issues2) = title
-            if year1 > 1989:
-                continue
-
-            filename_a, filename_b = format_filename(title)
-            text = requests.get(link + f"/files/{filename_a}").content
-
-            p = Path(__file__).parent / "../bulletin/public/issues/{year1}" / filename_a
-            p.parent.mkdir(parents=True, exist_ok=True)
-            p.write_text(text, encoding="utf-8")
-            p = Path(__file__).parent / "../bulletin/public/issues/{year2}" / filename_b
-            p.parent.mkdir(parents=True, exist_ok=True)
-            p.write_text(text, encoding="utf-8")
+            titles_by_year[year1].append(issues1)
+            titles_by_year[year2].append(issues2)
         else:
+            # print("TITEL", title)
             year, issues = title
-            if year > 1989:
-                continue
-            if not issues:
-                continue
+            if issues:
+                titles_by_year[year].append(issues)
+            else:
+                print("EMPTY", title)
 
-            filename = format_filename(title)
-            text = requests.get(link + f"/files/{filename}").content
-            p = Path(__file__).parent / "../bulletin/public/issues/{year}" / filename
-            p.parent.mkdir(parents=True, exist_ok=True)
-            p.write_text(text, encoding="utf-8")
+    for year in titles_by_year:
+        titles_by_year[year].sort()
 
-        time.sleep(1)
+    for year in titles_by_year:
+        titles_by_year[year] = [format_segment(year, issues, ext=False) for issues in titles_by_year[year]]
 
-
-    # titles_by_year = defaultdict(list)
-    # for title in titles:
-    #     if isinstance(title[0], tuple):
-    #         print("TITLE", title)
-    #         (year1, issues1), (year2, issues2) = title
-    #         titles_by_year[year1].append(issues1)
-    #         titles_by_year[year2].append(issues2)
-    #     else:
-    #         print("TITEL", title)
-    #         year, issues = title
-    #         if issues:
-    #             titles_by_year[year].append(issues)
-
-    # for year in titles_by_year:
-    #     titles_by_year[year].sort()
-
-    # (Path(__file__).parent / "processed_issues.json").write_text(json.dumps(titles_by_year))
+    (Path(__file__).parent / "processed_issues.json").write_text(json.dumps(titles_by_year))
 
 
 data = json.loads((Path(__file__).parent / "../issues.json").read_text())

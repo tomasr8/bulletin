@@ -1,150 +1,267 @@
 import "./main.scss";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import issues from "./processed_issues.json";
 
-function Years({ years, selectedYear, setSelectedYear }) {
+const formatIssues = (issues) => {
+  if (issues.length === 1) {
+    return `${issues[0]}`;
+  } else {
+    return `${issues[0]}-${issues.at(-1)}`;
+  }
+};
+
+function Years({ issues, selectedYear, setSelectedYear }) {
+  const [expanded, setExpanded] = useState(true);
+  const ref = useRef();
+
+  const years = Object.keys(issues);
+
   const classes = {
-    196: "is-link",
-    197: "is-warning",
-    198: "is-danger",
-    199: "is-success",
-    200: "is-link",
-    201: "is-warning",
-    202: "is-danger",
+    196: "is-warning",
+    197: "is-primary",
+    198: "is-link",
+    199: "is-warning",
+    200: "is-primary",
+    201: "is-link",
+    202: "is-warning",
+  };
+
+  const onExpand = () => {
+    if (expanded) {
+      ref.current.style.height = `${ref.current.scrollHeight}px`;
+      setTimeout(() => {
+        ref.current.style.height = 0;
+      }, 0);
+    } else {
+      ref.current.style.height = `${ref.current.scrollHeight}px`;
+    }
+    setExpanded((exp) => !exp);
+  };
+
+  const transitionEnd = () => {
+    if (expanded) {
+      ref.current.style.height = "auto";
+    }
   };
 
   return (
     <div className="block">
-      <h3 className="title">Year</h3>
-      <div className="years">
-        {years.map((year) => (
-          <div key={year} className="year">
-            <button
-              className={`button ${selectedYear === year ? "" : "is-light"} ${
-                classes[Math.floor(year / 10)]
-              }`}
-              onClick={() => setSelectedYear(year)}
-            >
-              {year}
-            </button>
-          </div>
-        ))}
+      <div className="box">
+        <h3 className="title" onClick={onExpand}>
+          Year
+        </h3>
+        <div className="years" ref={ref} onTransitionEnd={transitionEnd}>
+          {years.map((year) => {
+            const hasIssues = issues[year].length > 0;
+
+            if (!hasIssues) {
+              return (
+                <div key={year} className="year">
+                  <button disabled className={`button is-white`}>
+                    {year}
+                  </button>
+                </div>
+              );
+            }
+
+            return (
+              <div key={year} className="year">
+                <button
+                  className={`button ${
+                    selectedYear === year ? "" : "is-light"
+                  } ${classes[Math.floor(year / 10)]}`}
+                  onClick={() => setSelectedYear(year)}
+                >
+                  {year}
+                </button>
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );
 }
 
 function Issues({ issues, selectedYear, selectedIssue, setSelectedIssue }) {
+  const [expanded, setExpanded] = useState(true);
+  const ref = useRef();
   const currentIssues = issues[selectedYear];
 
-  const makeTitle = (issues) => {
-    if (issues.length === 1) {
-      return issues[0];
+  const onExpand = () => {
+    if (expanded) {
+      ref.current.style.height = `${ref.current.scrollHeight}px`;
+      setTimeout(() => {
+        ref.current.style.height = 0;
+      }, 0);
     } else {
-      return `${issues[0]}-${issues.at(-1)}`;
+      ref.current.style.height = `${ref.current.scrollHeight}px`;
+    }
+    setExpanded((exp) => !exp);
+  };
+
+  const transitionEnd = () => {
+    if (expanded) {
+      ref.current.style.height = "auto";
     }
   };
 
   return (
     <div className="block">
-      <h3 className="title">Issue</h3>
-      <div className="issues">
-        {currentIssues.map((issues) => (
-          <button
-            key={makeTitle(issues)}
-            className={`button is-link ${
-              selectedIssue === makeTitle(issues) ? "" : "is-light"
-            }`}
-            onClick={() => setSelectedIssue(makeTitle(issues))}
-          >
-            {makeTitle(issues)}
-          </button>
-        ))}
+      <div className="box">
+        <h3 className="title" onClick={onExpand}>
+          Issue №
+        </h3>
+        <div className="issues" ref={ref} onTransitionEnd={transitionEnd}>
+          {currentIssues.map((issues) => {
+            issues = formatIssues(issues);
+            return (
+              <button
+                key={issues}
+                className={`button is-link ${
+                  selectedIssue === issues ? "" : "is-light"
+                }`}
+                onClick={() => setSelectedIssue(issues)}
+              >
+                {issues}
+              </button>
+            );
+          })}
+        </div>
       </div>
     </div>
   );
 }
 
-function Timeline({
-  years,
-  issues,
-  selectedYear,
-  selectedIssue,
-  setSelectedYear,
-  setSelectedIssue,
-}) {
+function Search({ setSelectedYear, setSelectedIssue }) {
+  const [searchResults, setSearchResults] = useState([]);
+  const [searchValue, setSearchValue] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [expanded, setExpanded] = useState(true);
+  const ref = useRef();
+
+  const onExpand = () => {
+    if (expanded) {
+      ref.current.style.height = `${ref.current.scrollHeight}px`;
+      setTimeout(() => {
+        ref.current.style.height = 0;
+      }, 0);
+    } else {
+      ref.current.style.height = `${ref.current.scrollHeight}px`;
+    }
+    setExpanded((exp) => !exp);
+  };
+
+  const transitionEnd = () => {
+    if (expanded) {
+      ref.current.style.height = "auto";
+    }
+  };
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    const response = await fetch(`/api/search?q=${searchValue}`);
+    try {
+      const json = await response.json();
+      setSearchResults(json);
+      console.log(json);
+    } catch (e) {
+      setSearchResults([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const onResultClick = (year, issues) => (e) => {
+    setSelectedYear(year);
+    setSelectedIssue(issues);
+  };
+
   return (
-    <div className="timeline">
-      <Years
-        years={years}
-        selectedYear={selectedYear}
-        setSelectedYear={setSelectedYear}
-      />
-      <Issues
-        issues={issues}
-        selectedYear={selectedYear}
-        selectedIssue={selectedIssue}
-        setSelectedIssue={setSelectedIssue}
-      />
+    <div className="block">
+      <div className="box">
+        <h3 className="title" onClick={onExpand}>
+          Search
+        </h3>
+        <div className="search" ref={ref} onTransitionEnd={transitionEnd}>
+          <div className="block">
+            <form className="control" onSubmit={onSubmit}>
+              <div className="field">
+                <div className="control">
+                  <input
+                    className="input"
+                    type="text"
+                    placeholder="e.g. Higgs Boson"
+                    value={searchValue}
+                    onChange={(e) => setSearchValue(e.target.value)}
+                  />
+                </div>
+                <button
+                  className="button is-link"
+                  onClick={onSubmit}
+                  type="submit"
+                >
+                  Search
+                </button>
+                <input type="submit" hidden />
+              </div>
+            </form>
+          </div>
+          <div className="block results">
+            {loading && (
+              <progress className="progress is-primary" max="100"></progress>
+            )}
+            {!loading && (
+              <>
+                {searchResults.map(({ year, issues, headline }) => (
+                  <div
+                    key={headline}
+                    className="box result"
+                    onClick={onResultClick(year, issues)}
+                  >
+                    <span className="tag is-medium is-primary">
+                      {year}/{issues}
+                    </span>
+                    <span dangerouslySetInnerHTML={{ __html: headline }}></span>
+                  </div>
+                ))}
+              </>
+            )}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
 
 export default function Main() {
   const [selectedYear, setSelectedYear] = useState(1965);
-  const [selectedIssue, setSelectedIssue] = useState(1);
+  const [selectedIssue, setSelectedIssue] = useState("1");
 
-  const years = Object.keys(issues);
+  const data = `${process.env.PUBLIC_URL}/issues/${selectedYear}/${selectedIssue}.pdf`;
 
-  const data = `${process.env.PUBLIC_URL}/issues/${selectedIssue}-${selectedYear}.pdf`;
-  console.log("DATA", data);
-
-  const onClick = async () => {
-    const response = await fetch("/api/search?q=xxx");
-    const json = await response.json();
-    console.log(json);
-  };
+  console.log(selectedYear, selectedIssue);
 
   return (
     <div className="columns main">
-      <div className="column is-4">
-        <Timeline
-          years={years}
+      <div className="column is-4 left-column">
+        <Years
+          issues={issues}
+          selectedYear={selectedYear}
+          setSelectedYear={setSelectedYear}
+        />
+        <Issues
           issues={issues}
           selectedYear={selectedYear}
           selectedIssue={selectedIssue}
+          setSelectedIssue={setSelectedIssue}
+        />
+        <Search
           setSelectedYear={setSelectedYear}
           setSelectedIssue={setSelectedIssue}
         />
-        <div className="block">
-          <div className="field">
-            <div className="control">
-              <input
-                className="input"
-                type="email"
-                placeholder="e.g. alex@example.com"
-              />
-            </div>
-            <button className="button is-link" onClick={onClick}>
-              Search
-            </button>
-          </div>
-        </div>
-        <div className="block">
-          <div className="box">
-            <span class="tag is-link is-light">1965/4</span>Higgs Boson
-          </div>
-          <div className="box">
-            <span class="tag is-link is-light">1970/3-4</span>Higgs Boson
-          </div>
-          <div className="box">
-            <span class="tag is-link is-light">1984/7</span>Higgs Boson
-          </div>
-          <div className="box">
-            <span class="tag is-link is-light">1992/22</span>Higgs Boson
-          </div>
-        </div>
       </div>
       <div className="column">
         <div className="viewer">

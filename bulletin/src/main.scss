@@ -27,6 +27,10 @@ body {
   margin-top: 1em;
 }
 
+.left-column {
+  padding-left: 2em;
+}
+
 .viewer {
   width: 700px;
   height: 500px;
@@ -39,30 +43,66 @@ body {
   }
 }
 
-.timeline {
-  padding-left: 1em;
+.years {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em;
+  transition: all 0.35s ease-in-out;
+  overflow-y: hidden;
+
+  .year {
+    // flex-basis: 25%;
+  }
+}
+
+.issues {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3em;
+  transition: all 0.25s ease-in-out;
+  overflow-y: hidden;
+
+  button {
+    flex: 1;
+    max-width: 30%;
+  }
+}
+
+.search {
+  transition: all 0.35s ease-in-out;
+  overflow-y: hidden;
+
+  .field {
+    display: flex;
+    gap: 1em;
+
+    div.control {
+      flex: 1;
+    }
+  }
+}
+
+.results {
+  progress {
+    width: 50%;
+    margin: 3em auto 0 auto;
+  }
+
+  .result {
+    cursor: pointer;
+    display: flex;
+    gap: 1em;
+  }
+}
+
+
+.footer {
+  padding-top: 3em;
+  padding-bottom: 3em;
+}
+
+.images {
   display: flex;
   flex-direction: column;
-  gap: 1em;
-
-  .years {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5em;
-
-    .year {
-      // flex-basis: 25%;
-    }
-  }
-
-  .issues {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.3em;
-
-    button {
-      flex: 1;
-      max-width: 30%;
-    }
-  }
+  gap: 4em;
 }
