@@ -26,6 +26,22 @@ def parse_title(title):
         return parse_segment(title)
 
 
+def format_segment(year, issues):
+    if len(issues) == 1:
+        return f"{str(issues[0]).zfill(2)}-{year}.pdf"
+    else:
+        return f"{str(issues[0]).zfill(2)}-{str(issues[-1]).zfill(2)}-{year}.pdf"
+
+
+def format_filename(title):
+    if isinstance(title[0], tuple):
+        (year1, issues1), (year2, issues2) = title
+        return format_segment(year1, issues1), format_segment(year2, issues2)
+    else:
+        year, issues = title
+        return format_segment(year, issues)
+
+
 def process(data):
     titles = []
     for title, link in data:
@@ -39,21 +55,14 @@ def process(data):
             if year1 > 1989:
                 continue
 
-            raise Exception("???")
+            filename_a, filename_b = format_filename(title)
+            text = requests.get(link + f"/files/{filename_a}").content
 
-            text = requests.get(link)
-
-            if len(issues1) == 1:
-                t = issues1[0]
-            else:
-                t = f"{issues1[0]}-{issues1[-1]}"
-            p = Path(__file__).parent / "../bulletin/public/issues" / f"{t}_{year1}.pdf"
+            p = Path(__file__).parent / "../bulletin/public/issues/{year1}" / filename_a
+            p.parent.mkdir(parents=True, exist_ok=True)
             p.write_text(text, encoding="utf-8")
-            if len(issues2) == 1:
-                t = issues2[0]
-            else:
-                t = f"{issues2[0]}-{issues2[-1]}"
-            p = Path(__file__).parent / "../bulletin/public/issues" / f"{t}_{year2}.pdf"
+            p = Path(__file__).parent / "../bulletin/public/issues/{year2}" / filename_b
+            p.parent.mkdir(parents=True, exist_ok=True)
             p.write_text(text, encoding="utf-8")
         else:
             year, issues = title
@@ -62,22 +71,10 @@ def process(data):
             if not issues:
                 continue
 
-            if len(issues) == 1:
-                t = issues[0]
-            else:
-                t = f"{issues[0]}-{issues[-1]}"
-
-            if len(issues) == 1:
-                tt = str(issues[0]).zfill(2)
-            else:
-                tt = f"{str(issues[0]).zfill(2)}-{str(issues[-1]).zfill(2)}"
-
-            print("LINK", link.replace("https", "http") + f"/files/{tt}-{year}.pdf")
-            # response = urllib.request.urlopen(link + f"/files/{tt}-{year}.pdf")
-            text = requests.get(link.replace("https", "http") + f"/files/{tt}-{year}.pdf", headers={
-                'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36'
-            }).text
-            p = Path(__file__).parent / "../bulletin/public/issues" / f"{t}_{year}.pdf"
+            filename = format_filename(title)
+            text = requests.get(link + f"/files/{filename}").content
+            p = Path(__file__).parent / "../bulletin/public/issues/{year}" / filename
+            p.parent.mkdir(parents=True, exist_ok=True)
             p.write_text(text, encoding="utf-8")
 
         time.sleep(1)
@@ -104,8 +101,3 @@ def process(data):
 
 data = json.loads((Path(__file__).parent / "../issues.json").read_text())
 process(data)
-
-# url = 'http://example.com/'
-# response = urllib.request.urlopen(url)
-# data = response.read()      # a `bytes` object
-# text = data.decode('utf-8') # a `str`; this step can't be used if data is binary
