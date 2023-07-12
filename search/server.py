@@ -15,14 +15,127 @@ atexit.register(lambda: pool.close())
 # SELECT id, year, issues, ts_rank_cd(to_tsvector('english', content), query) AS rank, ts_headline(content, query) as headline FROM documents, plainto_tsquery('english', 'Higgs Boson') query WHERE to_tsvector('english', content) @@ query ORDER BY rank DESC LIMIT 5;
 # """
 
+# query_rank = """\
+# SELECT id, year, issues, ts_rank_cd(to_tsvector('english', content), query) AS rank, ts_headline(content, query) as headline
+# FROM documents, plainto_tsquery('english', %s) query
+# WHERE to_tsvector('english', content) @@ query
+# ORDER BY rank DESC
+# LIMIT 5
+# OFFSET 0;
+# """
+
+# query_rank = """\
+# SELECT id, year, issues, ts_rank_cd(to_tsvector('english', content) || to_tsvector('french', content), query) AS rank, ts_headline(content, query) as headline
+# FROM bilingual_documents, plainto_tsquery('english', %s) || plainto_tsquery('french', %s) query
+# WHERE (to_tsvector('english', content) || to_tsvector('french', content)) @@ query
+# UNION
+# SELECT id, year, issues, ts_rank_cd(to_tsvector('english', content), query) AS rank, ts_headline(content, query) as headline
+# FROM bilingual_documents, plainto_tsquery('english', %s) query
+# WHERE to_tsvector('english', content) @@ query
+# UNION
+# SELECT id, year, issues, ts_rank_cd(to_tsvector('french', content), query) AS rank, ts_headline(content, query) as headline
+# FROM bilingual_documents, plainto_tsquery('french', %s) query
+# WHERE to_tsvector('french', content) @@ query
+
+# ORDER BY rank DESC
+# LIMIT 5;
+# """
+
+# query_rank = """\
+# SELECT id, year, issues, ts_rank_cd(to_tsvector_multilang(content), query) AS rank, ts_headline(content, query) as headline, 'en-fr' as language
+# FROM bilingual_documents, tsquery_or(plainto_tsquery('english', 'Higgs Boson'), plainto_tsquery('french', 'Higgs Boson')) query
+# WHERE to_tsvector_multilang(content) @@ query
+# UNION
+# SELECT id, year, issues, ts_rank_cd(to_tsvector('english', content), query) AS rank, ts_headline(content, query) as headline, 'en' as language
+# FROM english_documents, plainto_tsquery('english', 'Higgs Boson') query
+# WHERE to_tsvector('english', content) @@ query
+# UNION
+# SELECT id, year, issues, ts_rank_cd(to_tsvector('french', content), query) AS rank, ts_headline(content, query) as headline, 'fr' as language
+# FROM french_documents, plainto_tsquery('french', 'Higgs Boson') query
+# WHERE to_tsvector('french', content) @@ query
+
+# ORDER BY rank DESC
+# LIMIT 5;
+# """
+
 query_rank = """\
+SELECT id, year, issues, ts_rank_cd(to_tsvector_multilang(content), query) AS rank, ts_headline(content, query) as headline, 'en-fr' as language
+FROM bilingual_documents, tsquery_or(plainto_tsquery('english', 'Higgs Boson'), plainto_tsquery('french', 'Higgs Boson')) query
+WHERE to_tsvector_multilang(content) @@ query
+
+ORDER BY rank DESC
+LIMIT 5;
+"""
+
+query_bilingual_english = """\
 SELECT id, year, issues, ts_rank_cd(to_tsvector('english', content), query) AS rank, ts_headline(content, query) as headline
-FROM documents, plainto_tsquery('english', %s) query
+FROM bilingual_documents, plainto_tsquery('english', 'Higgs Boson') query
 WHERE to_tsvector('english', content) @@ query
 ORDER BY rank DESC
-LIMIT 5
-OFFSET 0;
+LIMIT 5;
 """
+
+query_english = """\
+SELECT id, year, issues, ts_rank_cd(to_tsvector('english', content), query) AS rank, ts_headline(content, query) as headline
+FROM english_documents, plainto_tsquery('english', %s) query
+WHERE to_tsvector('english', content) @@ query
+ORDER BY rank DESC
+LIMIT 5;
+"""
+
+query_french = """\
+SELECT id, year, issues, ts_rank_cd(to_tsvector('french', content), query) AS rank, ts_headline(content, query) as headline
+FROM french_documents, plainto_tsquery('french', %s) query
+WHERE to_tsvector('french', content) @@ query
+ORDER BY rank DESC
+LIMIT 5;
+"""
+
+
+test """\
+SELECT id, year, issues, ts_rank_cd(to_tsvector('english', content), query) AS rank, ts_headline(content, query) as headline
+FROM english_documents, plainto_tsquery('english', 'Higgs Boson') query
+WHERE to_tsvector('english', content) @@ query
+ORDER BY rank DESC
+LIMIT 5;
+
+SELECT id, year, issues, ts_rank_cd(to_tsvector('french', content), query) AS rank, ts_headline(content, query) as headline
+FROM french_documents, plainto_tsquery('french', 'Higgs Boson') query
+WHERE to_tsvector('french', content) @@ query
+ORDER BY rank DESC
+LIMIT 5;
+"""
+
+# query_bilingual_english = """\
+# SELECT id, year, issues, ts_rank_cd(to_tsvector('english', content), query) AS rank, ts_headline(content, query) as headline
+# FROM bilingual_documents, plainto_tsquery('english', %s) query
+# WHERE to_tsvector('english', content) @@ query
+# ORDER BY rank DESC
+# LIMIT 5;
+# """
+
+
+# query_bilingual_french = """\
+# SELECT id, year, issues, ts_rank_cd(to_tsvector('french', content), query) AS rank, ts_headline(content, query) as headline
+# FROM bilingual_documents, plainto_tsquery('french', %s) query
+# WHERE to_tsvector('french', content) @@ query
+# ORDER BY rank DESC
+# LIMIT 5;
+# """
+
+
+# test """\
+# SELECT id, year, issues, ts_rank_cd(to_tsvector('english', content), query) AS rank, ts_headline(content, query) as headline
+# FROM bilingual_documents, plainto_tsquery('english', 'Higgs Boson') query
+# WHERE to_tsvector('english', content) @@ query
+# UNION ALL
+# SELECT id, year, issues, ts_rank_cd(to_tsvector('french', content), query) AS rank, ts_headline(content, query) as headline
+# FROM bilingual_documents, plainto_tsquery('french', 'Higgs Boson') query
+# WHERE to_tsvector('french', content) @@ query
+# ORDER BY rank DESC
+# LIMIT 5;
+# """
+
 
 
 @functools.lru_cache(maxsize=1024)
@@ -30,6 +143,10 @@ def search_db(q):
     with pool.connection() as conn:
         cur = conn.cursor()
         cur.execute(query_rank, (q,))
+        cur.execute(query_rank, (q,))
+        cur.execute(query_rank, (q,))
+        cur.execute(query_rank, (q,))
+
         results = cur.fetchall()
         return [{'year': result[1], 'issues': result[2], 'headline': result[4]} for result in results]
 
