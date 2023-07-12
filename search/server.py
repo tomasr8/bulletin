@@ -58,25 +58,24 @@ atexit.register(lambda: pool.close())
 # LIMIT 5;
 # """
 
-query_rank = """\
-SELECT id, year, issues, ts_rank_cd(to_tsvector_multilang(content), query) AS rank, ts_headline(content, query) as headline, 'en-fr' as language
-FROM bilingual_documents, tsquery_or(plainto_tsquery('english', 'Higgs Boson'), plainto_tsquery('french', 'Higgs Boson')) query
+# query_rank = """\
+# SELECT id, year, issues, page, ts_rank_cd(to_tsvector_multilang(content), query) AS rank, ts_headline(content, query) as headline, 'en-fr' as language
+# FROM bilingual_documents, tsquery_or(plainto_tsquery('english', 'Higgs Boson'), plainto_tsquery('french', 'Higgs Boson')) query
+# WHERE to_tsvector_multilang(content) @@ query
+# ORDER BY rank DESC
+# LIMIT 5;
+# """
+
+query_bilingual = """\
+SELECT id, year, issues, page, 'en-fr' as language, ts_rank_cd(to_tsvector_multilang(content), query) AS rank, ts_headline(content, query) as headline
+FROM bilingual_documents, tsquery_or(plainto_tsquery('english', %s), plainto_tsquery('french', %s)) query
 WHERE to_tsvector_multilang(content) @@ query
-
-ORDER BY rank DESC
-LIMIT 5;
-"""
-
-query_bilingual_english = """\
-SELECT id, year, issues, ts_rank_cd(to_tsvector('english', content), query) AS rank, ts_headline(content, query) as headline
-FROM bilingual_documents, plainto_tsquery('english', 'Higgs Boson') query
-WHERE to_tsvector('english', content) @@ query
 ORDER BY rank DESC
 LIMIT 5;
 """
 
 query_english = """\
-SELECT id, year, issues, ts_rank_cd(to_tsvector('english', content), query) AS rank, ts_headline(content, query) as headline
+SELECT id, year, issues, 'en' as language, ts_rank_cd(to_tsvector('english', content), query) AS rank, ts_headline(content, query) as headline
 FROM english_documents, plainto_tsquery('english', %s) query
 WHERE to_tsvector('english', content) @@ query
 ORDER BY rank DESC
@@ -84,7 +83,7 @@ LIMIT 5;
 """
 
 query_french = """\
-SELECT id, year, issues, ts_rank_cd(to_tsvector('french', content), query) AS rank, ts_headline(content, query) as headline
+SELECT id, year, issues, 'fr' as language, ts_rank_cd(to_tsvector('french', content), query) AS rank, ts_headline(content, query) as headline
 FROM french_documents, plainto_tsquery('french', %s) query
 WHERE to_tsvector('french', content) @@ query
 ORDER BY rank DESC
@@ -92,19 +91,19 @@ LIMIT 5;
 """
 
 
-test """\
-SELECT id, year, issues, ts_rank_cd(to_tsvector('english', content), query) AS rank, ts_headline(content, query) as headline
-FROM english_documents, plainto_tsquery('english', 'Higgs Boson') query
-WHERE to_tsvector('english', content) @@ query
-ORDER BY rank DESC
-LIMIT 5;
+# test """\
+# SELECT id, year, issues, ts_rank_cd(to_tsvector('english', content), query) AS rank, ts_headline(content, query) as headline
+# FROM english_documents, plainto_tsquery('english', 'Higgs Boson') query
+# WHERE to_tsvector('english', content) @@ query
+# ORDER BY rank DESC
+# LIMIT 5;
 
-SELECT id, year, issues, ts_rank_cd(to_tsvector('french', content), query) AS rank, ts_headline(content, query) as headline
-FROM french_documents, plainto_tsquery('french', 'Higgs Boson') query
-WHERE to_tsvector('french', content) @@ query
-ORDER BY rank DESC
-LIMIT 5;
-"""
+# SELECT id, year, issues, ts_rank_cd(to_tsvector('french', content), query) AS rank, ts_headline(content, query) as headline
+# FROM french_documents, plainto_tsquery('french', 'Higgs Boson') query
+# WHERE to_tsvector('french', content) @@ query
+# ORDER BY rank DESC
+# LIMIT 5;
+# """
 
 # query_bilingual_english = """\
 # SELECT id, year, issues, ts_rank_cd(to_tsvector('english', content), query) AS rank, ts_headline(content, query) as headline
@@ -137,18 +136,28 @@ LIMIT 5;
 # """
 
 
-
 @functools.lru_cache(maxsize=1024)
 def search_db(q):
     with pool.connection() as conn:
         cur = conn.cursor()
-        cur.execute(query_rank, (q,))
-        cur.execute(query_rank, (q,))
-        cur.execute(query_rank, (q,))
-        cur.execute(query_rank, (q,))
+        results = []
 
-        results = cur.fetchall()
-        return [{'year': result[1], 'issues': result[2], 'headline': result[4]} for result in results]
+        cur.execute(query_bilingual, (q, q))
+        results += cur.fetchall()
+        cur.execute(query_english, (q, q))
+        results += cur.fetchall()
+        cur.execute(query_french, (q, q))
+        results += cur.fetchall()
+
+        results.sort(key=lambda r: r[3])
+
+        return [
+            {
+                'year': result[1],
+                'issues': result[2],
+                'headline': result[4]
+            } for result in results
+        ][:5]
 
 
 @app.route('/api/search')

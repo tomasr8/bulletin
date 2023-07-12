@@ -4,10 +4,9 @@ from pypdf import PdfReader
 import psycopg2
 
 conn = psycopg2.connect('host=localhost dbname=bulletin user=postgres password=example port=5433')
-
 cur = conn.cursor()
 
-query = """INSERT INTO {}(year, issues, content) VALUES (%s, %s, %s);"""
+query = """INSERT INTO {}(year, issues, page, content) VALUES (%s, %s, %s, %s);"""
 
 
 def get_language(filename):
@@ -45,20 +44,20 @@ def insert_into_db():
             print()
             print(f'Skipping: {pdf}')
             print()
-        text = ''
-        for page in reader.pages:
-            text += page.extract_text()
 
         year = pdf.parents[0].stem
         issues = pdf.stem
         lang = get_language(issues)
         table_name = get_table_name(lang)
 
-        print(f'∟ {year}/{issues}')
-        cur.execute(query.format(table_name), (year, issues, text))
+        for i, page in enumerate(reader.pages):
+            print(f'∟ {year}/{issues}: page {i}')
+            text = page.extract_text()
+            cur.execute(query.format(table_name), (year, issues, i, text))
+    conn.commit()
 
 
-# prepare_db()
+prepare_db()
 insert_into_db()
-conn.commit()
 cur.close()
+conn.close()
