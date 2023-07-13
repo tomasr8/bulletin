@@ -12,6 +12,7 @@
     "react-router-dom": "^6.14.1",
     "react-scripts": "5.0.1",
     "sass": "^1.63.6",
+    "simple-line-icons": "^2.5.5",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

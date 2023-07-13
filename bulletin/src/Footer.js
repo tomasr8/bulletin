@@ -1,30 +1,50 @@
 import { ReactComponent as Logo } from "./logo.svg";
 
+import Disclaimer from "./Disclaimer";
+
 export default function Footer() {
   return (
     <footer className="footer">
       <div className="columns is-centered is-8 is-variable">
-        <div className="column is-2-desktop">
+        <div
+          className="column is-2-desktop"
+          style={{ display: "flex", flexDirection: "column", gap: "0.7em" }}
+        >
           <div>
-            <strong>CERN Bulletin online archive</strong>
+            <div>
+              <strong>CERN Bulletin Online Archive</strong>
+            </div>
+            <div>
+              created by{" "}
+              <a
+                href="https://github.com/tomasr8"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Tomas Roun
+              </a>
+            </div>
           </div>
           <div>
-            created by{" "}
             <a
-              href="https://github.com/tomasr8"
+              href="https://github.com/tomasr8/bulletin"
               target="_blank"
               rel="noreferrer"
             >
-              Tomas Roun
+              Github source
             </a>
           </div>
-          <div style={{ marginTop: "1em" }}>
-            <strong>Disclaimer</strong>
+          <div>
+            <a
+              href="https://cds.cern.ch/search?p=&action_search=H%C4%BEadaj&op1=a&m1=a&p1=&f1=&c=CERN+Bulletin+Issues&sf=year&so=a&rm=&rg=10&sc=0&of=hb"
+              target="_blank"
+              rel="noreferrer"
+            >
+              CERN CDS
+            </a>
           </div>
           <div>
-            The copyright to the CERN Bulletin issues is owned by the European
-            Organization for Nuclear Research (CERN) and is protected under
-            applicable intellectual property laws.
+            <a>Disclaimer</a>
           </div>
         </div>
         <div className="column is-2-desktop">

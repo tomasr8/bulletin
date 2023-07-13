@@ -66,6 +66,37 @@ atexit.register(lambda: pool.close())
 # LIMIT 5;
 # """
 
+query = """\
+SELECT * FROM
+(
+    SELECT id, year, issues, page, 'en-fr' as language, ts_rank_cd(to_tsvector_multilang(content), query) AS rank, ts_headline(content, query) as headline
+    FROM bilingual_documents, tsquery_or(plainto_tsquery('english', %(query)s), plainto_tsquery('french', %(query)s)) query
+    WHERE to_tsvector_multilang(content) @@ query
+    ORDER BY rank DESC
+    LIMIT %(subquery_limit)s OFFSET %(subquery_offset)s
+) q1
+UNION ALL
+SELECT * FROM
+(
+    SELECT id, year, issues, page, 'en' as language, ts_rank_cd(to_tsvector('english', content), query) AS rank, ts_headline(content, query) as headline
+    FROM english_documents, plainto_tsquery('english', %(query)s) query
+    WHERE to_tsvector('english', content) @@ query
+    ORDER BY rank DESC
+    LIMIT %(subquery_limit)s OFFSET %(subquery_offset)s
+) q2
+UNION ALL
+SELECT * FROM
+(
+    SELECT id, year, issues, page, 'fr' as language, ts_rank_cd(to_tsvector('french', content), query) AS rank, ts_headline(content, query) as headline
+    FROM french_documents, plainto_tsquery('french', %(query)s) query
+    WHERE to_tsvector('french', content) @@ query
+    ORDER BY rank DESC
+    LIMIT %(subquery_limit)s OFFSET %(subquery_offset)s
+) q3
+ORDER BY rank DESC
+LIMIT 5 OFFSET %(offset)s;
+"""
+
 query_bilingual = """\
 SELECT id, year, issues, page, 'en-fr' as language, ts_rank_cd(to_tsvector_multilang(content), query) AS rank, ts_headline(content, query) as headline
 FROM bilingual_documents, tsquery_or(plainto_tsquery('english', %s), plainto_tsquery('french', %s)) query
@@ -107,63 +138,30 @@ LIMIT 5;
 """
 
 
-# test """\
-# SELECT id, year, issues, ts_rank_cd(to_tsvector('english', content), query) AS rank, ts_headline(content, query) as headline
-# FROM english_documents, plainto_tsquery('english', 'Higgs Boson') query
-# WHERE to_tsvector('english', content) @@ query
-# ORDER BY rank DESC
-# LIMIT 5;
-
-# SELECT id, year, issues, ts_rank_cd(to_tsvector('french', content), query) AS rank, ts_headline(content, query) as headline
-# FROM french_documents, plainto_tsquery('french', 'Higgs Boson') query
-# WHERE to_tsvector('french', content) @@ query
-# ORDER BY rank DESC
-# LIMIT 5;
-# """
-
-# query_bilingual_english = """\
-# SELECT id, year, issues, ts_rank_cd(to_tsvector('english', content), query) AS rank, ts_headline(content, query) as headline
-# FROM bilingual_documents, plainto_tsquery('english', %s) query
-# WHERE to_tsvector('english', content) @@ query
-# ORDER BY rank DESC
-# LIMIT 5;
-# """
-
-
-# query_bilingual_french = """\
-# SELECT id, year, issues, ts_rank_cd(to_tsvector('french', content), query) AS rank, ts_headline(content, query) as headline
-# FROM bilingual_documents, plainto_tsquery('french', %s) query
-# WHERE to_tsvector('french', content) @@ query
-# ORDER BY rank DESC
-# LIMIT 5;
-# """
-
-
-# test """\
-# SELECT id, year, issues, ts_rank_cd(to_tsvector('english', content), query) AS rank, ts_headline(content, query) as headline
-# FROM bilingual_documents, plainto_tsquery('english', 'Higgs Boson') query
-# WHERE to_tsvector('english', content) @@ query
-# UNION ALL
-# SELECT id, year, issues, ts_rank_cd(to_tsvector('french', content), query) AS rank, ts_headline(content, query) as headline
-# FROM bilingual_documents, plainto_tsquery('french', 'Higgs Boson') query
-# WHERE to_tsvector('french', content) @@ query
-# ORDER BY rank DESC
-# LIMIT 5;
-# """
-
-
-@functools.lru_cache(maxsize=1024)
+# @functools.lru_cache(maxsize=1024)
 def search_db(q, offset):
     with pool.connection() as conn:
         cur = conn.cursor()
         results = []
 
-        cur.execute(query_bilingual, (q, q, offset))
+        import time
+        start = time.time()
+
+        subquery_offset = max(offset - 5, 0)
+        subquery_limit = offset + 5
+        cur.execute(query, dict(query=q, offset=offset,
+                                subquery_offset=subquery_offset,
+                                subquery_limit=subquery_limit))
+
+        # cur.execute(query_bilingual, (q, q, offset))
+        # results += cur.fetchall()
+        # cur.execute(query_english, (q, offset))
+        # results += cur.fetchall()
+        # cur.execute(query_french, (q, offset))
         results += cur.fetchall()
-        cur.execute(query_english, (q, offset))
-        results += cur.fetchall()
-        cur.execute(query_french, (q, offset))
-        results += cur.fetchall()
+
+        end = time.time()
+        print("TIME:", end-start)
 
         results.sort(key=lambda r: -r[5])
 
@@ -181,7 +179,7 @@ def search_db(q, offset):
 @app.route('/api/search')
 def search():
     q = request.args.get('q')
-    offset = request.args.get('offset', 0)
+    offset = int(request.args.get('offset', 0))
     if not q:
         return jsonify([])
 

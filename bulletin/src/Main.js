@@ -1,6 +1,6 @@
 import "./main.scss";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import issues from "./processed_issues.json";
 
 const formatIssues = (year, issues) => {
@@ -11,11 +11,24 @@ const formatIssues = (year, issues) => {
   }
 };
 
-function Years({ issues, selectedYear, setSelectedYear }) {
+const hasSeparateLanguages = (year) => {
+  return year >= 2009;
+};
+
+function Browse({
+  issues,
+  selectedYear,
+  selectedIssue,
+  selectedLanguage,
+  setSelectedYear,
+  setSelectedIssue,
+  setSelectedLanguage,
+}) {
   const [expanded, setExpanded] = useState(true);
   const ref = useRef();
 
   const years = Object.keys(issues).map((y) => parseInt(y, 10));
+  const currentIssues = issues[selectedYear];
 
   const classes = {
     196: "is-warning",
@@ -27,16 +40,6 @@ function Years({ issues, selectedYear, setSelectedYear }) {
     202: "is-warning",
   };
 
-  // const classes = {
-  //   196: "is-dark is-light",
-  //   197: "is-dark is-light",
-  //   198: "is-dark is-light",
-  //   199: "is-dark is-light",
-  //   200: "is-dark is-light",
-  //   201: "is-dark is-light",
-  //   202: "is-dark is-light",
-  // };
-
   const onExpand = () => {
     if (expanded) {
       ref.current.style.height = `${ref.current.scrollHeight}px`;
@@ -55,103 +58,88 @@ function Years({ issues, selectedYear, setSelectedYear }) {
     }
   };
 
+  const onSelectYear = (year) => () => {
+    setSelectedYear(year);
+    setSelectedLanguage("en");
+  };
+
   return (
     <div className="block">
       <div className="box">
-        <h3 className="title" onClick={onExpand}>
-          Year
-        </h3>
-        <div className="years" ref={ref} onTransitionEnd={transitionEnd}>
-          {years.map((year) => {
-            const hasIssues = issues[year].length > 0;
+        <div className="header" onClick={onExpand}>
+          <h4 className="title is-4">Browse</h4>
+          <div>
+            <i className={`icon-arrow-left ${expanded ? "expanded" : ""}`}></i>
+          </div>
+        </div>
+        <div
+          className="scroll-wrapper"
+          ref={ref}
+          onTransitionEnd={transitionEnd}
+        >
+          <div className="subheader">
+            <h2 className="subtitle">Year</h2>
+          </div>
+          <div className="years">
+            {years.map((year) => {
+              const hasIssues = issues[year].length > 0;
 
-            if (!hasIssues) {
+              if (!hasIssues) {
+                return (
+                  <div key={year} className="year">
+                    <button disabled className={`button is-white`}>
+                      {year}
+                    </button>
+                  </div>
+                );
+              }
+
               return (
                 <div key={year} className="year">
-                  <button disabled className={`button is-white`}>
+                  <button
+                    className={`button ${
+                      selectedYear === year ? "" : "is-light"
+                    } ${classes[Math.floor(year / 10)]}`}
+                    onClick={onSelectYear(year)}
+                  >
                     {year}
                   </button>
                 </div>
               );
-            }
-
-            return (
-              <div key={year} className="year">
+            })}
+          </div>
+          <div className="subheader">
+            <h2 className="subtitle">Issue</h2>
+            {hasSeparateLanguages(selectedYear) && (
+              <div
+                className={`buttons has-addons is-centered ${
+                  expanded ? "expanded" : ""
+                }`}
+                onClick={(e) => e.stopPropagation()}
+              >
                 <button
                   className={`button ${
-                    selectedYear === year ? "" : "is-light"
-                  } ${classes[Math.floor(year / 10)]}`}
-                  onClick={() => setSelectedYear(year)}
+                    selectedLanguage === "en" ? "is-dark" : ""
+                  }`}
+                  onClick={() => setSelectedLanguage("en")}
                 >
-                  {year}
+                  EN
+                </button>
+                <button
+                  className={`button ${
+                    selectedLanguage === "fr" ? "is-dark" : ""
+                  }`}
+                  onClick={() => setSelectedLanguage("fr")}
+                >
+                  FR
                 </button>
               </div>
-            );
-          })}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function Issues({ issues, selectedYear, selectedIssue, setSelectedIssue }) {
-  const [expanded, setExpanded] = useState(true);
-  const ref = useRef();
-  const currentIssues = issues[selectedYear];
-
-  const onExpand = () => {
-    if (expanded) {
-      ref.current.style.height = `${ref.current.scrollHeight}px`;
-      setTimeout(() => {
-        ref.current.style.height = 0;
-        ref.current.style.paddingTop = 0;
-      }, 0);
-    } else {
-      ref.current.style.height = `${ref.current.scrollHeight}px`;
-    }
-    setExpanded((exp) => !exp);
-  };
-
-  const transitionEnd = () => {
-    if (expanded) {
-      ref.current.style.height = "auto";
-      ref.current.style.paddingTop = "1.5rem";
-    }
-  };
-
-  return (
-    <div className="block">
-      <div className="box">
-        <div className="header">
-          <h3 className="title" onClick={onExpand}>
-            Issue №
-          </h3>
-          <div class="tabs is-toggle">
-            <ul>
-              <li class="is-active">
-                <a>
-                  <span style={{ fontSize: 24, paddingRight: "0.5em" }}>
-                    🇬🇧
-                  </span>{" "}
-                  <span>English</span>
-                </a>
-              </li>
-              <li>
-                <a>
-                  <span style={{ fontSize: 24, paddingRight: "0.5em" }}>
-                    🇫🇷
-                  </span>{" "}
-                  <span>French</span>
-                </a>
-              </li>
-            </ul>
+            )}
           </div>
-        </div>
-        <div className="issues" ref={ref} onTransitionEnd={transitionEnd}>
-          {currentIssues.map((issues) => {
-            issues = formatIssues(selectedYear, issues);
+          <div className="issues">
+            {currentIssues.map((issues) => {
+              issues = formatIssues(selectedYear, issues);
 
-            if (selectedYear < 2009) {
               return (
                 <button
                   key={issues}
@@ -163,79 +151,26 @@ function Issues({ issues, selectedYear, selectedIssue, setSelectedIssue }) {
                   {issues}
                 </button>
               );
-            } else {
-              const en = `${issues}_en`;
-              const fr = `${issues}_fr`;
-
-              return (
-                <>
-                  <button
-                    key={en}
-                    className={`button is-link ${
-                      selectedIssue === en ? "" : "is-light"
-                    }`}
-                    onClick={() => setSelectedIssue(en)}
-                  >
-                    <span style={{ fontSize: 24, paddingRight: "0.5em" }}>
-                      🇬🇧
-                    </span>
-                    {`${issues}`}
-                  </button>
-                  <button
-                    key={fr}
-                    className={`button is-link ${
-                      selectedIssue === fr ? "" : "is-light"
-                    }`}
-                    onClick={() => setSelectedIssue(fr)}
-                  >
-                    <span style={{ fontSize: 24, paddingRight: "0.5em" }}>
-                      🇫🇷
-                    </span>
-                    {`${issues}`}
-                  </button>
-                  {/* <div
-                    key={en}
-                    className="buttons has-addons"
-                    onClick={() => setSelectedIssue(en)}
-                  >
-                    <button
-                      className={`button is-link static ${
-                        selectedIssue === en ? "" : "is-light"
-                      }`}
-                    >
-                      <span style={{ fontSize: 24 }}>🇬🇧</span>
-                    </button>
-                    <button
-                      className={`button is-link ${
-                        selectedIssue === en ? "" : "is-light"
-                      }`}
-                    >
-                      {issues}
-                    </button>
-                  </div> */}
-                  {/* <div className="buttons has-addons">
-                    <button className="button is-light is-link is-static">
-                      en
-                    </button>
-                    <button className="button is-light is-link">
-                      {issues}
-                    </button>
-                  </div> */}
-                </>
-              );
-            }
-          })}
+            })}
+          </div>
         </div>
       </div>
     </div>
   );
 }
 
-function Search({ setSelectedYear, setSelectedIssue }) {
+function Search({
+  setSelectedYear,
+  setSelectedIssue,
+  setSelectedPage,
+  setSelectedLanguage,
+}) {
   const [searchResults, setSearchResults] = useState([]);
   const [offset, setOffset] = useState(0);
   const [searchValue, setSearchValue] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [isLoadingInitial, setIsLoadingInitial] = useState(false);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
   const [expanded, setExpanded] = useState(true);
   const ref = useRef();
 
@@ -257,104 +192,131 @@ function Search({ setSelectedYear, setSelectedIssue }) {
     }
   };
 
-  const onSubmit = async (e) => {
+  const fetchResults = async (q, offset = 0) => {
+    const response = await fetch(
+      `/api/search?q=${searchValue}&offset=${offset}`
+    );
+    return await response.json();
+  };
+
+  const isLoading = isLoadingInitial || isLoadingMore;
+
+  const onSearch = async (e) => {
     e.preventDefault();
-    setOffset(0);
-    setLoading(true);
-    const response = await fetch(`/api/search?q=${searchValue}&offset=0`);
+    if (isLoading) {
+      return;
+    }
+
+    setOffset(0); // reset offset
+    setIsLoadingInitial(true);
     try {
-      const json = await response.json();
-      setSearchResults(json);
-      console.log(json);
+      const results = await fetchResults(searchValue);
+      setSearchResults(results);
+      if (results.length < 5) {
+        setHasMore(false);
+      } else {
+        setHasMore(true);
+      }
+      setHasMore(true);
     } catch (e) {
       setSearchResults([]);
-      setOffset(0);
     } finally {
-      setLoading(false);
+      setIsLoadingInitial(false);
     }
   };
 
   const onMore = async (e) => {
-    setOffset((v) => v + 5);
-    setLoading(true);
-    console.log("OFFSET", offset + 5);
-    const response = await fetch(
-      `/api/search?q=${searchValue}&offset=${offset + 5}`
-    );
+    if (isLoading) {
+      return;
+    }
+
+    setIsLoadingMore(true);
+    const newOffset = offset + 5;
+    setOffset(newOffset); // increase offset
+
     try {
-      const json = await response.json();
-      setSearchResults((r) => [...r, ...json]);
-      console.log(json);
+      const results = await fetchResults(searchValue, newOffset);
+      setSearchResults((v) => [...v, ...results]);
+      if (results.length === 0) {
+        setHasMore(false);
+      } else {
+        setHasMore(true);
+      }
     } catch (e) {
       setSearchResults([]);
       setOffset(0);
     } finally {
-      setLoading(false);
+      setIsLoadingMore(false);
     }
   };
 
-  const onResultClick = (year, issues) => (e) => {
+  const onResultClick = (year, issues, page, language) => (e) => {
     setSelectedYear(year);
     setSelectedIssue(issues);
+    setSelectedPage(page);
+    if (language === "en-fr") {
+      setSelectedLanguage("");
+    } else {
+      setSelectedLanguage(language);
+    }
   };
 
   return (
     <div className="block">
       <div className="box">
-        <h3 className="title" onClick={onExpand}>
-          Search
-        </h3>
-        <div className="search" ref={ref} onTransitionEnd={transitionEnd}>
-          <div className="block">
-            <form className="control" onSubmit={onSubmit}>
-              <div className="field">
-                <div className="control">
-                  <input
-                    className="input"
-                    type="text"
-                    placeholder="e.g. Higgs Boson"
-                    value={searchValue}
-                    onChange={(e) => setSearchValue(e.target.value)}
-                  />
-                </div>
-                <button
-                  className="button is-link"
-                  onClick={onSubmit}
-                  type="submit"
-                >
-                  Search
-                </button>
-                <input type="submit" hidden />
-              </div>
-            </form>
+        <div className="header" onClick={onExpand}>
+          <h4 className="title is-4">Search</h4>
+          <div>
+            <i className={`icon-arrow-left ${expanded ? "expanded" : ""}`}></i>
           </div>
-          <div className="block results">
-            {loading && (
-              <progress className="progress is-primary" max="100"></progress>
-            )}
-            {!loading && (
-              <>
-                {searchResults.map(
-                  ({ year, issues, page, language, headline }) => (
+        </div>
+        <div
+          className="scroll-wrapper"
+          ref={ref}
+          onTransitionEnd={transitionEnd}
+        >
+          <div className="search">
+            <div className="block">
+              <form className="control" onSubmit={onSearch}>
+                <div className="field">
+                  <div className="control">
+                    <input
+                      className="input"
+                      type="text"
+                      placeholder="e.g. Higgs Boson"
+                      value={searchValue}
+                      onChange={(e) => setSearchValue(e.target.value)}
+                    />
+                  </div>
+                  <button
+                    className={`button is-link ${
+                      isLoadingInitial ? "is-loading" : ""
+                    }`}
+                    onClick={onSearch}
+                    type="submit"
+                  >
+                    <span className="icon is-small">
+                      <i className="icon-magnifier"></i>
+                    </span>
+                    <span>Search</span>
+                  </button>
+                  <input type="submit" hidden />
+                </div>
+              </form>
+            </div>
+            <div className="block results">
+              {searchResults.map(
+                ({ year, issues, page, language, headline }, i) => (
+                  <div key={`${i}-${headline}`} className="result-numbered">
+                    <div>{i + 1}</div>
                     <div
-                      key={headline}
                       className="box result"
-                      onClick={onResultClick(year, issues)}
+                      onClick={onResultClick(year, issues, page, language)}
                     >
                       <div
                         className="tags has-addons"
                         style={{ flexWrap: "nowrap" }}
                       >
-                        {/* {language === "en" && (
-                          <span className="tag is-medium is-light is-link">
-                            <span style={{ fontSize: 22 }}>🇬🇧</span>
-                          </span>
-                        )}
-                        {language === "fr" && (
-                          <span className="tag is-medium is-light is-link">
-                            <span style={{ fontSize: 22 }}>🇫🇷</span>
-                          </span>
-                        )} */}
                         <span className="tag is-medium is-primary">{year}</span>
                         <span className="tag is-medium is-link">
                           {issues.split("_")[0]}
@@ -365,15 +327,22 @@ function Search({ setSelectedYear, setSelectedIssue }) {
                         dangerouslySetInnerHTML={{ __html: headline }}
                       ></span>
                     </div>
-                  )
-                )}
-                {searchResults.length > 0 && (
-                  <button className="button is-link" onClick={onMore}>
+                  </div>
+                )
+              )}
+              {hasMore && searchResults.length > 0 && (
+                <div className="load-more">
+                  <button
+                    className={`button is-link ${
+                      isLoadingMore ? "is-loading" : ""
+                    }`}
+                    onClick={onMore}
+                  >
                     More..
                   </button>
-                )}
-              </>
-            )}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -384,28 +353,31 @@ function Search({ setSelectedYear, setSelectedIssue }) {
 export default function Main() {
   const [selectedYear, setSelectedYear] = useState(1965);
   const [selectedIssue, setSelectedIssue] = useState("1");
+  const [selectedLanguage, setSelectedLanguage] = useState("");
+  const [selectedPage, setSelectedPage] = useState(1);
 
-  const data = `${process.env.PUBLIC_URL}/issues/${selectedYear}/${selectedIssue}.pdf`;
+  const languageSuffix = selectedLanguage ? `_${selectedLanguage}` : "";
+  const data = `${process.env.PUBLIC_URL}/issues/${selectedYear}/${selectedIssue}${languageSuffix}.pdf?#page=${selectedPage}`;
 
   console.log(selectedYear, selectedIssue);
 
   return (
     <div className="columns main">
       <div className="column is-4 left-column">
-        <Years
-          issues={issues}
-          selectedYear={selectedYear}
-          setSelectedYear={setSelectedYear}
-        />
-        <Issues
+        <Browse
           issues={issues}
           selectedYear={selectedYear}
           selectedIssue={selectedIssue}
+          selectedLanguage={selectedLanguage}
+          setSelectedYear={setSelectedYear}
           setSelectedIssue={setSelectedIssue}
+          setSelectedLanguage={setSelectedLanguage}
         />
         <Search
           setSelectedYear={setSelectedYear}
           setSelectedIssue={setSelectedIssue}
+          setSelectedPage={setSelectedPage}
+          setSelectedLanguage={setSelectedLanguage}
         />
       </div>
       <div className="column">
