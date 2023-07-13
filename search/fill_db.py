@@ -44,6 +44,7 @@ def insert_into_db():
             print()
             print(f'Skipping: {pdf}')
             print()
+            continue
 
         year = pdf.parents[0].stem
         issues = pdf.stem
@@ -57,7 +58,21 @@ def insert_into_db():
     conn.commit()
 
 
+def post_insert():
+    sql = (Path(__file__).parent / 'post_init.sql').read_text()
+    cur.execute(sql)
+    conn.commit()
+
+
+def analyze():
+    conn.set_isolation_level(psycopg2.extensions.ISOLATION_LEVEL_AUTOCOMMIT)
+    cur.execute("ALTER DATABASE bulletin SET default_statistics_target = '10000'")
+    cur.execute('VACUUM (FULL,ANALYZE)')
+
+
 prepare_db()
 insert_into_db()
+post_insert()
+analyze()
 cur.close()
 conn.close()

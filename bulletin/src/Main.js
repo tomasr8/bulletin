@@ -3,7 +3,7 @@ import "./main.scss";
 import { useEffect, useRef, useState } from "react";
 import issues from "./processed_issues.json";
 
-const formatIssues = (issues) => {
+const formatIssues = (year, issues) => {
   if (issues.length === 1) {
     return `${issues[0]}`;
   } else {
@@ -15,7 +15,7 @@ function Years({ issues, selectedYear, setSelectedYear }) {
   const [expanded, setExpanded] = useState(true);
   const ref = useRef();
 
-  const years = Object.keys(issues);
+  const years = Object.keys(issues).map((y) => parseInt(y, 10));
 
   const classes = {
     196: "is-warning",
@@ -26,6 +26,16 @@ function Years({ issues, selectedYear, setSelectedYear }) {
     201: "is-link",
     202: "is-warning",
   };
+
+  // const classes = {
+  //   196: "is-dark is-light",
+  //   197: "is-dark is-light",
+  //   198: "is-dark is-light",
+  //   199: "is-dark is-light",
+  //   200: "is-dark is-light",
+  //   201: "is-dark is-light",
+  //   202: "is-dark is-light",
+  // };
 
   const onExpand = () => {
     if (expanded) {
@@ -94,6 +104,7 @@ function Issues({ issues, selectedYear, selectedIssue, setSelectedIssue }) {
       ref.current.style.height = `${ref.current.scrollHeight}px`;
       setTimeout(() => {
         ref.current.style.height = 0;
+        ref.current.style.paddingTop = 0;
       }, 0);
     } else {
       ref.current.style.height = `${ref.current.scrollHeight}px`;
@@ -104,29 +115,115 @@ function Issues({ issues, selectedYear, selectedIssue, setSelectedIssue }) {
   const transitionEnd = () => {
     if (expanded) {
       ref.current.style.height = "auto";
+      ref.current.style.paddingTop = "1.5rem";
     }
   };
 
   return (
     <div className="block">
       <div className="box">
-        <h3 className="title" onClick={onExpand}>
-          Issue №
-        </h3>
+        <div className="header">
+          <h3 className="title" onClick={onExpand}>
+            Issue №
+          </h3>
+          <div class="tabs is-toggle">
+            <ul>
+              <li class="is-active">
+                <a>
+                  <span style={{ fontSize: 24, paddingRight: "0.5em" }}>
+                    🇬🇧
+                  </span>{" "}
+                  <span>English</span>
+                </a>
+              </li>
+              <li>
+                <a>
+                  <span style={{ fontSize: 24, paddingRight: "0.5em" }}>
+                    🇫🇷
+                  </span>{" "}
+                  <span>French</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
         <div className="issues" ref={ref} onTransitionEnd={transitionEnd}>
           {currentIssues.map((issues) => {
-            issues = formatIssues(issues);
-            return (
-              <button
-                key={issues}
-                className={`button is-link ${
-                  selectedIssue === issues ? "" : "is-light"
-                }`}
-                onClick={() => setSelectedIssue(issues)}
-              >
-                {issues}
-              </button>
-            );
+            issues = formatIssues(selectedYear, issues);
+
+            if (selectedYear < 2009) {
+              return (
+                <button
+                  key={issues}
+                  className={`button is-link ${
+                    selectedIssue === issues ? "" : "is-light"
+                  }`}
+                  onClick={() => setSelectedIssue(issues)}
+                >
+                  {issues}
+                </button>
+              );
+            } else {
+              const en = `${issues}_en`;
+              const fr = `${issues}_fr`;
+
+              return (
+                <>
+                  <button
+                    key={en}
+                    className={`button is-link ${
+                      selectedIssue === en ? "" : "is-light"
+                    }`}
+                    onClick={() => setSelectedIssue(en)}
+                  >
+                    <span style={{ fontSize: 24, paddingRight: "0.5em" }}>
+                      🇬🇧
+                    </span>
+                    {`${issues}`}
+                  </button>
+                  <button
+                    key={fr}
+                    className={`button is-link ${
+                      selectedIssue === fr ? "" : "is-light"
+                    }`}
+                    onClick={() => setSelectedIssue(fr)}
+                  >
+                    <span style={{ fontSize: 24, paddingRight: "0.5em" }}>
+                      🇫🇷
+                    </span>
+                    {`${issues}`}
+                  </button>
+                  {/* <div
+                    key={en}
+                    className="buttons has-addons"
+                    onClick={() => setSelectedIssue(en)}
+                  >
+                    <button
+                      className={`button is-link static ${
+                        selectedIssue === en ? "" : "is-light"
+                      }`}
+                    >
+                      <span style={{ fontSize: 24 }}>🇬🇧</span>
+                    </button>
+                    <button
+                      className={`button is-link ${
+                        selectedIssue === en ? "" : "is-light"
+                      }`}
+                    >
+                      {issues}
+                    </button>
+                  </div> */}
+                  {/* <div className="buttons has-addons">
+                    <button className="button is-light is-link is-static">
+                      en
+                    </button>
+                    <button className="button is-light is-link">
+                      {issues}
+                    </button>
+                  </div> */}
+                </>
+              );
+            }
           })}
         </div>
       </div>
@@ -136,6 +233,7 @@ function Issues({ issues, selectedYear, selectedIssue, setSelectedIssue }) {
 
 function Search({ setSelectedYear, setSelectedIssue }) {
   const [searchResults, setSearchResults] = useState([]);
+  const [offset, setOffset] = useState(0);
   const [searchValue, setSearchValue] = useState("");
   const [loading, setLoading] = useState(false);
   const [expanded, setExpanded] = useState(true);
@@ -161,14 +259,35 @@ function Search({ setSelectedYear, setSelectedIssue }) {
 
   const onSubmit = async (e) => {
     e.preventDefault();
+    setOffset(0);
     setLoading(true);
-    const response = await fetch(`/api/search?q=${searchValue}`);
+    const response = await fetch(`/api/search?q=${searchValue}&offset=0`);
     try {
       const json = await response.json();
       setSearchResults(json);
       console.log(json);
     } catch (e) {
       setSearchResults([]);
+      setOffset(0);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const onMore = async (e) => {
+    setOffset((v) => v + 5);
+    setLoading(true);
+    console.log("OFFSET", offset + 5);
+    const response = await fetch(
+      `/api/search?q=${searchValue}&offset=${offset + 5}`
+    );
+    try {
+      const json = await response.json();
+      setSearchResults((r) => [...r, ...json]);
+      console.log(json);
+    } catch (e) {
+      setSearchResults([]);
+      setOffset(0);
     } finally {
       setLoading(false);
     }
@@ -215,18 +334,44 @@ function Search({ setSelectedYear, setSelectedIssue }) {
             )}
             {!loading && (
               <>
-                {searchResults.map(({ year, issues, headline }) => (
-                  <div
-                    key={headline}
-                    className="box result"
-                    onClick={onResultClick(year, issues)}
-                  >
-                    <span className="tag is-medium is-primary">
-                      {year}/{issues}
-                    </span>
-                    <span dangerouslySetInnerHTML={{ __html: headline }}></span>
-                  </div>
-                ))}
+                {searchResults.map(
+                  ({ year, issues, page, language, headline }) => (
+                    <div
+                      key={headline}
+                      className="box result"
+                      onClick={onResultClick(year, issues)}
+                    >
+                      <div
+                        className="tags has-addons"
+                        style={{ flexWrap: "nowrap" }}
+                      >
+                        {/* {language === "en" && (
+                          <span className="tag is-medium is-light is-link">
+                            <span style={{ fontSize: 22 }}>🇬🇧</span>
+                          </span>
+                        )}
+                        {language === "fr" && (
+                          <span className="tag is-medium is-light is-link">
+                            <span style={{ fontSize: 22 }}>🇫🇷</span>
+                          </span>
+                        )} */}
+                        <span className="tag is-medium is-primary">{year}</span>
+                        <span className="tag is-medium is-link">
+                          {issues.split("_")[0]}
+                        </span>
+                        <span className="tag is-medium is-warning">{page}</span>
+                      </div>
+                      <span
+                        dangerouslySetInnerHTML={{ __html: headline }}
+                      ></span>
+                    </div>
+                  )
+                )}
+                {searchResults.length > 0 && (
+                  <button className="button is-link" onClick={onMore}>
+                    More..
+                  </button>
+                )}
               </>
             )}
           </div>

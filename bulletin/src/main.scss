@@ -55,6 +55,11 @@ body {
   }
 }
 
+.header {
+  display: flex;
+  gap: 2em;
+}
+
 .issues {
   display: flex;
   flex-wrap: wrap;
@@ -62,10 +67,11 @@ body {
   transition: all 0.25s ease-in-out;
   overflow-y: hidden;
 
-  button {
-    flex: 1;
-    max-width: 30%;
-  }
+
+  // button {
+  //   flex: 1;
+  //   max-width: 30%;
+  // }
 }
 
 .search {
@@ -95,7 +101,6 @@ body {
   }
 }
 
-
 .footer {
   padding-top: 3em;
   padding-bottom: 3em;
@@ -103,6 +108,34 @@ body {
 
 .images {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 5em;
   gap: 4em;
+
+  image {
+    flex-basis: 50%;
+  }
+}
+
+.block .box h3.title {
+  margin-bottom: 0;
+}
+
+.years,
+.issues,
+.results {
+  padding-top: 1.5rem;
+}
+
+button.static {
+  // padding-left: 0.6em;
+  padding-right: 0;
+
+  &:hover {
+  }
+}
+
+div.buttons.has-addons {
+  margin-bottom: 0;
 }

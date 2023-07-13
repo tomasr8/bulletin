@@ -9,7 +9,7 @@ import b5 from "./images/b5.png";
 import b6 from "./images/b6.png";
 import b7 from "./images/b7.png";
 
-export default function Look() {
+export default function Article() {
   return (
     <>
       <Header />

@@ -71,20 +71,36 @@ SELECT id, year, issues, page, 'en-fr' as language, ts_rank_cd(to_tsvector_multi
 FROM bilingual_documents, tsquery_or(plainto_tsquery('english', %s), plainto_tsquery('french', %s)) query
 WHERE to_tsvector_multilang(content) @@ query
 ORDER BY rank DESC
-LIMIT 5;
+LIMIT 5 OFFSET %s;
 """
 
 query_english = """\
-SELECT id, year, issues, 'en' as language, ts_rank_cd(to_tsvector('english', content), query) AS rank, ts_headline(content, query) as headline
+SELECT id, year, issues, page, 'en' as language, ts_rank_cd(to_tsvector('english', content), query) AS rank, ts_headline(content, query) as headline
 FROM english_documents, plainto_tsquery('english', %s) query
+WHERE to_tsvector('english', content) @@ query
+ORDER BY rank DESC
+LIMIT 5 OFFSET %s;
+"""
+
+query_french = """\
+SELECT id, year, issues, page, 'fr' as language, ts_rank_cd(to_tsvector('french', content), query) AS rank, ts_headline(content, query) as headline
+FROM french_documents, plainto_tsquery('french', %s) query
+WHERE to_tsvector('french', content) @@ query
+ORDER BY rank DESC
+LIMIT 5 OFFSET %s;
+"""
+
+query_englishx = """\
+SELECT id, year, issues, page, 'en' as language, ts_rank_cd(to_tsvector('english', content), query) AS rank, ts_headline(content, query) as headline
+FROM english_documents, plainto_tsquery('english', 'Nobel prize') query
 WHERE to_tsvector('english', content) @@ query
 ORDER BY rank DESC
 LIMIT 5;
 """
 
-query_french = """\
-SELECT id, year, issues, 'fr' as language, ts_rank_cd(to_tsvector('french', content), query) AS rank, ts_headline(content, query) as headline
-FROM french_documents, plainto_tsquery('french', %s) query
+query_frenchx = """\
+SELECT id, year, issues, page, 'fr' as language, ts_rank_cd(to_tsvector('french', content), query) AS rank, ts_headline(content, query) as headline
+FROM french_documents, plainto_tsquery('french', 'Nobel prize') query
 WHERE to_tsvector('french', content) @@ query
 ORDER BY rank DESC
 LIMIT 5;
@@ -137,25 +153,27 @@ LIMIT 5;
 
 
 @functools.lru_cache(maxsize=1024)
-def search_db(q):
+def search_db(q, offset):
     with pool.connection() as conn:
         cur = conn.cursor()
         results = []
 
-        cur.execute(query_bilingual, (q, q))
+        cur.execute(query_bilingual, (q, q, offset))
         results += cur.fetchall()
-        cur.execute(query_english, (q, q))
+        cur.execute(query_english, (q, offset))
         results += cur.fetchall()
-        cur.execute(query_french, (q, q))
+        cur.execute(query_french, (q, offset))
         results += cur.fetchall()
 
-        results.sort(key=lambda r: r[3])
+        results.sort(key=lambda r: -r[5])
 
         return [
             {
                 'year': result[1],
                 'issues': result[2],
-                'headline': result[4]
+                'page': result[3] + 1,
+                'language': result[4],
+                'headline': result[6]
             } for result in results
         ][:5]
 
@@ -163,11 +181,12 @@ def search_db(q):
 @app.route('/api/search')
 def search():
     q = request.args.get('q')
+    offset = request.args.get('offset', 0)
     if not q:
         return jsonify([])
 
     print("QUERY", q)
-    results = search_db(q)
+    results = search_db(q, offset)
     return jsonify(results)
 
 
