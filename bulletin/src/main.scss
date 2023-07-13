@@ -137,9 +137,12 @@ body {
 }
 
 .results {
-  padding: 1em 0.8em 1em 0.4em;
   max-height: 500px;
   overflow-y: auto;
+
+  &:not(:empty) {
+    padding: 1em 0.8em 1em 0.4em;
+  }
 
   progress {
     width: 50%;
