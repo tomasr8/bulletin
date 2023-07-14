@@ -167,8 +167,8 @@ def search_db(q, offset):
 
         return [
             {
-                'year': result[1],
-                'issues': result[2],
+                'year': int(result[1]),
+                'issues': result[2].split('_')[0],
                 'page': result[3] + 1,
                 'language': result[4],
                 'headline': result[6]

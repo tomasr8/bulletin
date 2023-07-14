@@ -3,6 +3,8 @@ import "./main.scss";
 import { useRef, useState } from "react";
 import issues from "./processed_issues.json";
 
+const years = Object.keys(issues).map((y) => parseInt(y, 10));
+
 const formatIssues = (year, issues) => {
   if (issues.length === 1) {
     return `${issues[0]}`;
@@ -13,6 +15,40 @@ const formatIssues = (year, issues) => {
 
 const hasSeparateLanguages = (year) => {
   return year >= 2009;
+};
+
+const hasIssues = (yearIssues) => {
+  const has = (issues) => issues.some((issue) => issue.exists);
+  return (
+    has(yearIssues["en-fr"] || []) ||
+    has(yearIssues["en"] || []) ||
+    has(yearIssues["fr"] || [])
+  );
+};
+
+const getClosestIssue = (yearIssues, currentIssue) => {
+  currentIssue = currentIssue.split("-").map((n) => parseInt(n, 10));
+
+  function getDist(i1, i2) {
+    if (i1.length === 1 && i2.length === 1) {
+      return Math.abs(i1 - i2);
+    } else if (i1.length === 1) {
+      return Math.abs(i2.at(0) - i1) + Math.abs(i1 - i2.at(-1));
+    } else if (i2.length === 1) {
+      return Math.abs(i1.at(0) - i2) + Math.abs(i2 - i1.at(-1));
+    } else {
+      return Math.abs(i1.at(0) - i2.at(0)) + Math.abs(i1.at(-1) - i2.at(-1));
+    }
+  }
+
+  const dist = yearIssues.map((issue) => [
+    issue,
+    getDist(issue.issue, currentIssue),
+  ]);
+  console.log(dist);
+  // console.log("closest", currentIssue, dist.find(([issue, _]) => issue.exists)[0].issue);
+  dist.sort((a, b) => a[1] - b[1]);
+  return dist.find(([issue, _]) => issue.exists)[0].issue;
 };
 
 function Browse({
@@ -27,18 +63,8 @@ function Browse({
   const [expanded, setExpanded] = useState(true);
   const ref = useRef();
 
-  const years = Object.keys(issues).map((y) => parseInt(y, 10));
+  // const years = Object.keys(issues).map((y) => parseInt(y, 10));
   const currentIssues = issues[selectedYear];
-
-  const classes = {
-    196: "is-warning",
-    197: "is-primary",
-    198: "is-link",
-    199: "is-warning",
-    200: "is-primary",
-    201: "is-link",
-    202: "is-warning",
-  };
 
   const onExpand = () => {
     if (expanded) {
@@ -60,8 +86,33 @@ function Browse({
 
   const onSelectYear = (year) => () => {
     setSelectedYear(year);
-    setSelectedLanguage("en");
+    const issue = getClosestIssue(
+      issues[year]["en-fr"] || issues[year]["en"],
+      selectedIssue
+    );
+    console.log("closest", selectedIssue, issue);
+
+    if (hasSeparateLanguages(year)) {
+      if (selectedLanguage === "en-fr") {
+        setSelectedLanguage("en");
+      }
+    } else {
+      setSelectedLanguage("en-fr");
+    }
+    setSelectedIssue(formatIssues(year, issue));
   };
+
+  const onSelectLanguage = (language) => () => {
+    const issue = getClosestIssue(
+      issues[selectedYear][language],
+      selectedIssue
+    );
+    setSelectedLanguage(language);
+    setSelectedIssue(formatIssues(selectedYear, issue));
+  };
+
+  const yearsTotal = years.length;
+  console.log(currentIssues, selectedLanguage);
 
   return (
     <div className="block">
@@ -81,25 +132,43 @@ function Browse({
             <h2 className="subtitle">Year</h2>
           </div>
           <div className="years">
-            {years.map((year) => {
-              const hasIssues = issues[year].length > 0;
-
-              if (!hasIssues) {
+            {years.map((year, i) => {
+              if (!hasIssues(issues[year])) {
                 return (
                   <div key={year} className="year">
-                    <button disabled className={`button is-white`}>
+                    <button disabled className="button is-white">
                       {year}
                     </button>
                   </div>
                 );
               }
 
+              const hue = Math.round((i / yearsTotal) * 360);
+              const bgColor = `hsl(${hue}, 100%, 96%)`;
+              const fontColor = `hsl(${hue}, 100%, 29%)`;
+              const boxShadow = `0 0 0 0.125em hsla(${hue}, 100%, 77%, 0.25);`;
+
+              const darkBgColor = `hsl(${hue}, 53%, 51%)`;
+              const darkFontColor = "#fff";
+
+              const style =
+                selectedYear === year
+                  ? {
+                      backgroundColor: darkBgColor,
+                      color: darkFontColor,
+                    }
+                  : {
+                      backgroundColor: bgColor,
+                      color: fontColor,
+                    };
+
               return (
                 <div key={year} className="year">
                   <button
-                    className={`button ${
-                      selectedYear === year ? "" : "is-light"
-                    } ${classes[Math.floor(year / 10)]}`}
+                    className={`button is-year ${
+                      selectedYear === year ? "dark" : ""
+                    }`}
+                    style={style}
                     onClick={onSelectYear(year)}
                   >
                     {year}
@@ -109,7 +178,12 @@ function Browse({
             })}
           </div>
           <div className="subheader">
-            <h2 className="subtitle">Issue</h2>
+            <h2 className="subtitle">
+              Issues{" "}
+              <span className="tag is-medium is-rounded">
+                {currentIssues[selectedLanguage].length}
+              </span>
+            </h2>
             {hasSeparateLanguages(selectedYear) && (
               <div
                 className={`buttons has-addons is-centered ${
@@ -119,17 +193,17 @@ function Browse({
               >
                 <button
                   className={`button ${
-                    selectedLanguage === "en" ? "is-dark" : ""
+                    selectedLanguage === "en" ? "is-primary" : ""
                   }`}
-                  onClick={() => setSelectedLanguage("en")}
+                  onClick={onSelectLanguage("en")}
                 >
                   EN
                 </button>
                 <button
                   className={`button ${
-                    selectedLanguage === "fr" ? "is-dark" : ""
+                    selectedLanguage === "fr" ? "is-primary" : ""
                   }`}
-                  onClick={() => setSelectedLanguage("fr")}
+                  onClick={onSelectLanguage("fr")}
                 >
                   FR
                 </button>
@@ -137,18 +211,27 @@ function Browse({
             )}
           </div>
           <div className="issues">
-            {currentIssues.map((issues) => {
-              issues = formatIssues(selectedYear, issues);
+            {currentIssues[selectedLanguage].map(({ issue, exists }) => {
+              issue = formatIssues(selectedYear, issue);
+
+              if (!exists) {
+                return (
+                  <button key={issue} className="button is-white" disabled>
+                    {issue}
+                  </button>
+                );
+              }
 
               return (
                 <button
-                  key={issues}
+                  key={issue}
                   className={`button is-link ${
-                    selectedIssue === issues ? "" : "is-light"
+                    selectedIssue === issue ? "" : "is-light"
                   }`}
-                  onClick={() => setSelectedIssue(issues)}
+                  onClick={() => setSelectedIssue(issue)}
+                  disabled={!exists}
                 >
-                  {issues}
+                  {issue}
                 </button>
               );
             })}
@@ -171,6 +254,7 @@ function Search({
   const [isLoadingInitial, setIsLoadingInitial] = useState(false);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(true);
+  const [selectedResult, setSelectedResult] = useState(null);
   const [expanded, setExpanded] = useState(true);
   const ref = useRef();
 
@@ -207,6 +291,8 @@ function Search({
       return;
     }
 
+    setSelectedResult(null);
+
     setOffset(0); // reset offset
     setIsLoadingInitial(true);
     try {
@@ -230,6 +316,8 @@ function Search({
       return;
     }
 
+    setSelectedResult(null);
+
     setIsLoadingMore(true);
     const newOffset = offset + 5;
     setOffset(newOffset); // increase offset
@@ -237,7 +325,7 @@ function Search({
     try {
       const results = await fetchResults(searchValue, newOffset);
       setSearchResults((v) => [...v, ...results]);
-      if (results.length === 0) {
+      if (results.length < 5) {
         setHasMore(false);
       } else {
         setHasMore(true);
@@ -250,15 +338,12 @@ function Search({
     }
   };
 
-  const onResultClick = (year, issues, page, language) => (e) => {
+  const onResultClick = (i, year, issues, page, language) => (e) => {
+    setSelectedResult(i);
     setSelectedYear(year);
     setSelectedIssue(issues);
     setSelectedPage(page);
-    if (language === "en-fr") {
-      setSelectedLanguage("");
-    } else {
-      setSelectedLanguage(language);
-    }
+    setSelectedLanguage(language);
   };
 
   return (
@@ -308,10 +393,18 @@ function Search({
               {searchResults.map(
                 ({ year, issues, page, language, headline }, i) => (
                   <div key={`${i}-${headline}`} className="result-numbered">
-                    <div>{i + 1}</div>
+                    <div>
+                      <span
+                        className={`tag is-medium ${
+                          selectedResult === i ? "is-link" : "is-white"
+                        } is-rounded`}
+                      >
+                        {i + 1}
+                      </span>
+                    </div>
                     <div
                       className="box result"
-                      onClick={onResultClick(year, issues, page, language)}
+                      onClick={onResultClick(i, year, issues, page, language)}
                     >
                       <div
                         className="tags has-addons"
@@ -351,15 +444,26 @@ function Search({
 }
 
 export default function Main() {
-  const [selectedYear, setSelectedYear] = useState(1965);
-  const [selectedIssue, setSelectedIssue] = useState("1");
-  const [selectedLanguage, setSelectedLanguage] = useState("");
+  const _y = years.filter((y) => hasIssues(issues[y]));
+  const randomYear = _y[Math.floor(Math.random() * _y.length)];
+  const randomLanguage = issues[randomYear]["en-fr"] ? "en-fr" : "en";
+  const _i = issues[randomYear][randomLanguage].filter((i) => i.exists);
+  const randomIssue = formatIssues(
+    randomYear,
+    _i[Math.floor(Math.random() * _i.length)].issue
+  );
+  console.log(randomYear, randomLanguage, randomIssue);
+
+  const [selectedYear, setSelectedYear] = useState(randomYear);
+  const [selectedIssue, setSelectedIssue] = useState(randomIssue);
+  const [selectedLanguage, setSelectedLanguage] = useState(randomLanguage);
   const [selectedPage, setSelectedPage] = useState(1);
 
-  const languageSuffix = selectedLanguage ? `_${selectedLanguage}` : "";
+  const languageSuffix =
+    selectedLanguage === "en-fr" ? "" : `_${selectedLanguage}`;
   const data = `${process.env.PUBLIC_URL}/issues/${selectedYear}/${selectedIssue}${languageSuffix}.pdf?#page=${selectedPage}`;
 
-  console.log(selectedYear, selectedIssue);
+  console.log("YIL", selectedYear, selectedIssue, selectedLanguage);
 
   return (
     <div className="columns main">

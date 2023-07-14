@@ -1,29 +1,46 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 
 import App from "./App";
-import Look from "./Look";
-import Article from "./Articles";
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <App />,
-  },
-  {
-    path: "/history",
-    element: <Look />,
-  },
-  {
-    path: "/articles",
-    element: <Article />,
-  },
-]);
+// const router = createBrowserRouter([
+//   {
+//     path: "/",
+//     element: <App />,
+//     children: [
+//       {
+//         path: "explore",
+//       },
+//       {
+//         path: 'covers',
+//         element: <Look />
+//       },
+//       {
+//         path
+//       }
+//     ],
+//   },
+//   {
+//     path: ["/", "/explore"],
+//     element: <App />,
+//   },
+//   {
+//     path: "/history",
+//     element: <Look />,
+//   },
+//   {
+//     path: "/articles",
+//     element: <Article />,
+//   },
+// ]);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+    {/* <RouterProvider router={router} /> */}
   </React.StrictMode>
 );

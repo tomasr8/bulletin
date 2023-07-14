@@ -1,3 +1,7 @@
+import { Routes, Route, Link } from "react-router-dom";
+
+import { ReactComponent as Logo } from "./logo2.svg";
+
 export default function Header() {
   return (
     <nav
@@ -5,19 +9,22 @@ export default function Header() {
       role="navigation"
       aria-label="main navigation"
     >
+      <div className="navbar-brand">
+        <Link to="/" className="navbar-item">
+          <Logo style={{ width: 55 }} />
+        </Link>
+      </div>
       <div id="navbarBasicExample" className="navbar-menu">
         <div className="navbar-start">
-          <a className="navbar-item">CERN CDS</a>
-          <a className="navbar-item">Github</a>
-          <a className="navbar-item" href="/">
+          <Link to="/" className="navbar-item">
             Explore
-          </a>
-          <a className="navbar-item" href="/history">
+          </Link>
+          <Link to="/covers" className="navbar-item">
             Cover design
-          </a>
-          <a className="navbar-item" href="/articles">
+          </Link>
+          <Link to="/articles" className="navbar-item">
             Interesting articles
-          </a>
+          </Link>
         </div>
       </div>
     </nav>

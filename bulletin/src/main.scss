@@ -24,7 +24,8 @@ body {
 }
 
 .main {
-  margin-top: 1em;
+  margin-top: 0.5em;
+  gap: 1em;
 }
 
 .left-column {
@@ -141,7 +142,7 @@ body {
   overflow-y: auto;
 
   &:not(:empty) {
-    padding: 1em 0.8em 1em 0.4em;
+    padding: 1em 0.8em 1em 0;
   }
 
   progress {
@@ -155,7 +156,7 @@ body {
 
   .result-numbered {
     display: flex;
-    gap: 1.5em;
+    gap: 1em;
     align-items: center;
 
     .result {
@@ -214,4 +215,31 @@ button.static {
 
 div.buttons.has-addons {
   margin-bottom: 0;
+}
+
+.button.is-year {
+  border-color: transparent;
+
+  &:hover {
+    filter: brightness(96%);
+  }
+
+  &:focus:not(:active) {
+    box-shadow: none;
+  }
+
+  &:active {
+    filter: brightness(92%);
+
+  }
+}
+
+.button.dark.is-year {
+  &:hover {
+    filter: brightness(94%);
+  }
+
+  &:active {
+    filter: brightness(90%);
+  }
 }

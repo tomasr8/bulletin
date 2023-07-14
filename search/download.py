@@ -6,6 +6,33 @@ import time
 import requests
 
 
+def format_issue(issue):
+    if len(issue) == 1:
+        return str(issue[0])
+    return f'{issue[0]}-{issue[-1]}'
+
+
+def fill_gaps(issues):
+    last = issues[-1] if isinstance(issues[-1], int) else issues[-1][-1]
+
+    i = 1
+    curr = 0
+    while i <= last:
+        issue = issues[curr]
+        if i < issue[0]:
+            if i + 1 == issue[0]:
+                yield (i,)
+            else:
+                yield (i, issue[0]-1)
+            i = issue[0]
+        elif i == issue[0]:
+            yield issue
+            i = issue[-1] + 1
+            curr += 1
+        else:
+            i = issues[curr][0]
+
+
 def parse_title(title):
     title = title.removeprefix('CERN Bulletin Issue No. ')
     if '&' in title:
@@ -94,13 +121,13 @@ def process(data):
 
     all_issues = []
     for title, base in data:
-        print(title)
+        # print(title)
         for year, issues in parse_title(title):
             assert len(issues) > 0
             assert (year, issues) not in duplicates
             duplicates.add((year, issues))
 
-            print(f'∟ {year}/{issues}')
+            # print(f'∟ {year}/{issues}')
             all_issues.append((year, issues))
 
             # for link, file_path in get_links(base, year, issues):
@@ -118,7 +145,45 @@ def process(data):
     for year in issues_by_year:
         issues_by_year[year].sort()
 
-    (Path(__file__).parent / '../issues-processed.json').write_text(json.dumps(issues_by_year))
+    processed_issues = {}
+    for year, issues in issues_by_year.items():
+        if year < 2009:
+            processed_issues[year] = {
+                'en-fr': [],
+            }
+        else:
+            processed_issues[year] = {
+                'en': [],
+                'fr': []
+            }
+
+        print(year)
+        # print(issues)
+        for issue in fill_gaps(issues):
+            if year < 2009:
+                p = (Path(__file__).parent / f'../bulletin/public/issues/{year}/{format_issue(issue)}.pdf')
+                # print(p)
+                if not p.is_file():
+                    print(f'∟ Missing: {year}/{format_issue(issue)}')
+                    processed_issues[year]['en-fr'].append({'issue': issue, 'exists': False})
+                else:
+                    processed_issues[year]['en-fr'].append({'issue': issue, 'exists': True})
+            else:
+                p_en = (Path(__file__).parent / f'../bulletin/public/issues/{year}/{format_issue(issue)}_en.pdf')
+                p_fr = (Path(__file__).parent / f'../bulletin/public/issues/{year}/{format_issue(issue)}_fr.pdf')
+                # print(p_en)
+                if not p_en.is_file():
+                    print(f'∟ Missing(en): {year}/{format_issue(issue)}')
+                    processed_issues[year]['en'].append({'issue': issue, 'exists': False})
+                else:
+                    processed_issues[year]['en'].append({'issue': issue, 'exists': True})
+                if not p_fr.is_file():
+                    print(f'∟ Missing(fr): {year}/{format_issue(issue)}')
+                    processed_issues[year]['fr'].append({'issue': issue, 'exists': False})
+                else:
+                    processed_issues[year]['fr'].append({'issue': issue, 'exists': True})
+
+    (Path(__file__).parent / '../issues-processed.json').write_text(json.dumps(processed_issues))
 
 
 data = json.loads((Path(__file__).parent / '../issues-clean.json').read_text())

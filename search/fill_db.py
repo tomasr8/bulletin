@@ -15,7 +15,7 @@ def get_language(filename):
     elif filename.endswith('_fr'):
         return 'fr'
     else:
-        return 'bilingual'
+        return 'en-fr'
 
 
 def get_table_name(lang):
@@ -50,6 +50,7 @@ def insert_into_db():
         issues = pdf.stem
         lang = get_language(issues)
         table_name = get_table_name(lang)
+        issues = issues.split('_')[0]  # strip the language from the name
 
         for i, page in enumerate(reader.pages):
             print(f'∟ {year}/{issues}: page {i}')
