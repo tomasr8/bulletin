@@ -392,7 +392,11 @@ function Search({
             <div className="block results">
               {searchResults.map(
                 ({ year, issues, page, language, headline }, i) => (
-                  <div key={`${i}-${headline}`} className="result-numbered">
+                  <div
+                    key={`${i}-${headline}`}
+                    className="result-numbered"
+                    onClick={onResultClick(i, year, issues, page, language)}
+                  >
                     <div>
                       <span
                         className={`tag is-medium ${
@@ -402,10 +406,7 @@ function Search({
                         {i + 1}
                       </span>
                     </div>
-                    <div
-                      className="box result"
-                      onClick={onResultClick(i, year, issues, page, language)}
-                    >
+                    <div className="box result">
                       <div
                         className="tags has-addons"
                         style={{ flexWrap: "nowrap" }}
@@ -467,7 +468,7 @@ export default function Main() {
 
   return (
     <div className="columns main">
-      <div className="column is-4 left-column">
+      <div className="column is-4-desktop is-6-tablet is-12-mobile left-column">
         <Browse
           issues={issues}
           selectedYear={selectedYear}
@@ -484,7 +485,7 @@ export default function Main() {
           setSelectedLanguage={setSelectedLanguage}
         />
       </div>
-      <div className="column">
+      <div className="column is-4-desktop is-6-tablet is-12-mobile">
         <div className="viewer">
           <object data={data} type="application/pdf">
             Failed to load PDF

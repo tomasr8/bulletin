@@ -1,0 +1,18 @@
+.wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 5em;
+  gap: 4em;
+
+  image {
+    flex-basis: 50%;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .wrapper {
+    padding: 1em 0;
+    gap: 1em;
+  }
+}

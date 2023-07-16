@@ -6,9 +6,11 @@ import b5 from "./images/b5.png";
 import b6 from "./images/b6.png";
 import b7 from "./images/b7.png";
 
+import styles from "./Look.module.scss";
+
 export default function Look() {
   return (
-    <div className="images">
+    <div className={styles.wrapper}>
       <img src={b1} alt="" />
       <img src={b2} alt="" />
       <img src={b3} alt="" />
