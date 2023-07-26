@@ -6,7 +6,7 @@ authors = [
 description = "CERN Bulletin Online Archive"
 readme = "README.md"
 requires-python = ">=3.11"
-license = "MIT"
+# license = "GPL version 3, excluding DRM provisions"
 dependencies = ["numpy"]
 dynamic = ["version"]
 

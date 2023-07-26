@@ -5,7 +5,7 @@ from flask import Flask, request, jsonify
 from psycopg_pool import ConnectionPool
 
 
-conn_info = "host=localhost dbname=bulletin user=postgres password=example port=5433"
+conn_info = "host=localhost dbname=bulletin user=postgres password=example port=5432"
 pool = ConnectionPool(conn_info, min_size=4, max_size=20, open=True)
 app = Flask(__name__)
 
@@ -188,4 +188,4 @@ def search():
     return jsonify(results)
 
 
-app.run(host='0.0.0.0', port=5000)
+# app.run(host='0.0.0.0', port=5000)

@@ -24,7 +24,7 @@ body {
 }
 
 .main {
-  margin: 0.5em 1em 0 1em;
+  margin: 0.5em 0.5em 0 0.5em;
   gap: 1em;
 }
 
@@ -144,21 +144,23 @@ body {
 .results {
   max-height: 500px;
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
 
   &:not(:empty) {
     padding: 1em 0.8em 1em 0;
   }
 
-  progress {
-    width: 50%;
-    margin: 3em auto 2em auto;
+  .suggestions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1em;
   }
 
-  display: flex;
-  flex-direction: column;
-  gap: 1em;
-
   .result-numbered {
+    container-type: inline-size;
     display: flex;
     gap: 1em;
     align-items: center;
@@ -260,6 +262,28 @@ div.buttons.has-addons {
 
   .viewer {
     min-height: 700px;
+  }
+
+  .results {
+    max-height: unset;
+
+    .result-numbered .result {
+      flex-direction: column;
+
+      .tags {
+        margin-right: auto;
+      }
+    }
+  }
+}
+
+@container (max-width: 400px) {
+  .results .result-numbered .result {
+    flex-direction: column;
+
+    .tags {
+      margin-right: auto;
+    }
   }
 }
 

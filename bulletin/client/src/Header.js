@@ -35,7 +35,7 @@ export default function Header() {
             Cover design
           </Link>
           <Link to="/articles" className="navbar-item">
-            Interesting articles
+            Featured articles
           </Link>
         </div>
       </div>

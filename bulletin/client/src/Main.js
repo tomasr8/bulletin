@@ -136,7 +136,11 @@ function Browse({
               if (!hasIssues(issues[year])) {
                 return (
                   <div key={year} className="year">
-                    <button disabled className="button is-white">
+                    <button
+                      disabled
+                      className="button is-white"
+                      title="Not available"
+                    >
                       {year}
                     </button>
                   </div>
@@ -216,7 +220,12 @@ function Browse({
 
               if (!exists) {
                 return (
-                  <button key={issue} className="button is-white" disabled>
+                  <button
+                    key={issue}
+                    className="button is-white"
+                    title="Not available"
+                    disabled
+                  >
                     {issue}
                   </button>
                 );
@@ -292,7 +301,6 @@ function Search({
     }
 
     setSelectedResult(null);
-
     setOffset(0); // reset offset
     setIsLoadingInitial(true);
     try {
@@ -390,6 +398,22 @@ function Search({
               </form>
             </div>
             <div className="block results">
+              {searchResults.length === 0 && (
+                <div className="suggestions">
+                  <button className="button is-primary" onClick={() => {}}>
+                    Higgs Boson
+                  </button>
+                  <button className="button is-primary" onClick={() => {}}>
+                    World Wide Web
+                  </button>
+                  <button className="button is-primary" onClick={() => {}}>
+                    Ski club
+                  </button>
+                  <button className="button is-primary" onClick={() => {}}>
+                    Python Programming
+                  </button>
+                </div>
+              )}
               {searchResults.map(
                 ({ year, issues, page, language, headline }, i) => (
                   <div
@@ -418,6 +442,7 @@ function Search({
                         <span className="tag is-medium is-warning">{page}</span>
                       </div>
                       <span
+                        style={{ wordBreak: "break-word" }}
                         dangerouslySetInnerHTML={{ __html: headline }}
                       ></span>
                     </div>
@@ -467,8 +492,8 @@ export default function Main() {
   console.log("YIL", selectedYear, selectedIssue, selectedLanguage);
 
   return (
-    <div className="columns main">
-      <div className="column is-4-desktop is-6-tablet is-12-mobile left-column">
+    <div className="columns is-desktop main">
+      <div className="column is-4-desktop left-column">
         <Browse
           issues={issues}
           selectedYear={selectedYear}
@@ -485,7 +510,7 @@ export default function Main() {
           setSelectedLanguage={setSelectedLanguage}
         />
       </div>
-      <div className="column is-4-desktop is-6-tablet is-12-mobile">
+      <div className="column is-7-desktop">
         <div className="viewer">
           <object data={data} type="application/pdf">
             Failed to load PDF
