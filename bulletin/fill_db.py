@@ -3,10 +3,13 @@ from pathlib import Path
 from pypdf import PdfReader
 import psycopg2
 
-conn = psycopg2.connect('host=localhost dbname=bulletin user=postgres password=example port=5433')
+# conn = psycopg.connect('host=localhost dbname=bulletin user=postgres password=example port=5433')
+conn = psycopg2.connect('host=localhost dbname=bulletin user=postgres password=*** port=5434')
 cur = conn.cursor()
 
 query = """INSERT INTO {}(year, issues, page, content) VALUES (%s, %s, %s, %s);"""
+
+pdf_query = """INSERT INTO pdfs(year, issue, content) VALUES (%s, %s, %s);"""
 
 
 def get_language(filename):
@@ -34,7 +37,7 @@ def prepare_db():
 
 
 def insert_into_db():
-    for pdf in (Path(__file__).parent / '../bulletin/public/issues').rglob('*'):
+    for pdf in (Path(__file__).parent / 'client/public/issues').rglob('*'):
         if not pdf.is_file():
             continue
 

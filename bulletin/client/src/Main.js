@@ -398,22 +398,6 @@ function Search({
               </form>
             </div>
             <div className="block results">
-              {searchResults.length === 0 && (
-                <div className="suggestions">
-                  <button className="button is-primary" onClick={() => {}}>
-                    Higgs Boson
-                  </button>
-                  <button className="button is-primary" onClick={() => {}}>
-                    World Wide Web
-                  </button>
-                  <button className="button is-primary" onClick={() => {}}>
-                    Ski club
-                  </button>
-                  <button className="button is-primary" onClick={() => {}}>
-                    Python Programming
-                  </button>
-                </div>
-              )}
               {searchResults.map(
                 ({ year, issues, page, language, headline }, i) => (
                   <div
@@ -492,29 +476,32 @@ export default function Main() {
   console.log("YIL", selectedYear, selectedIssue, selectedLanguage);
 
   return (
-    <div className="columns is-desktop main">
-      <div className="column is-4-desktop left-column">
-        <Browse
-          issues={issues}
-          selectedYear={selectedYear}
-          selectedIssue={selectedIssue}
-          selectedLanguage={selectedLanguage}
-          setSelectedYear={setSelectedYear}
-          setSelectedIssue={setSelectedIssue}
-          setSelectedLanguage={setSelectedLanguage}
-        />
-        <Search
-          setSelectedYear={setSelectedYear}
-          setSelectedIssue={setSelectedIssue}
-          setSelectedPage={setSelectedPage}
-          setSelectedLanguage={setSelectedLanguage}
-        />
-      </div>
-      <div className="column is-7-desktop">
-        <div className="viewer">
-          <object data={data} type="application/pdf">
-            Failed to load PDF
-          </object>
+    <div className="app-wrapper">
+      <div className="columns is-desktop main">
+        <div className="column is-4-desktop left-column">
+          <Browse
+            issues={issues}
+            selectedYear={selectedYear}
+            selectedIssue={selectedIssue}
+            selectedLanguage={selectedLanguage}
+            setSelectedYear={setSelectedYear}
+            setSelectedIssue={setSelectedIssue}
+            setSelectedLanguage={setSelectedLanguage}
+          />
+          <Search
+            setSelectedYear={setSelectedYear}
+            setSelectedIssue={setSelectedIssue}
+            setSelectedPage={setSelectedPage}
+            setSelectedLanguage={setSelectedLanguage}
+          />
+        </div>
+        <div className="column is-8-desktop">
+          <div className="viewer">
+            {/* <div className="circle"></div> */}
+            <object data={data} type="application/pdf">
+              Failed to load PDF
+            </object>
+          </div>
         </div>
       </div>
     </div>

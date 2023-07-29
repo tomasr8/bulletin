@@ -23,29 +23,79 @@ body {
   border-bottom: 1px solid rgba(128, 128, 128, 0.212);
 }
 
-.main {
-  margin: 0.5em 0.5em 0 0.5em;
-  gap: 1em;
-}
-
-// .left-column {
-//   padding-left: 2em;
+// .main {
+//   margin: 0.5em 0.5em 0 0.5em;
+//   gap: 1em;
 // }
+
+.circle {
+  // z-index: 1;
+  position: absolute;
+  bottom: -25px;
+  right: -25px;
+  width: 50px;
+  height: 50px;
+  background-color: red;
+  border-radius: 50%;
+}
+.outer {
+  display: flex;
+  position: relative;
+
+  // &::after {
+  //   // z-index: 1;
+  //   position: absolute;
+  //   bottom: -25px;
+  //   right: -25px;
+  //   width: 50px;
+  //   height: 50px;
+  //   content: "";
+  //   background-color: red;
+  //   border-radius: 50%;
+  // }
+}
 
 .viewer {
   // margin: 0 1em;
   // width: 800px;
   // width: 100%;
   display: flex;
-  height: 100%;
+  min-height: max(90vh, 1000px);
+  // height: 100%;
   resize: both;
   overflow: auto;
+  position: relative;
 
   object {
     flex-basis: 100%;
+    position: relative;
+    // z-index: 2;
     // width: 100%;
     // height: 100%;
   }
+
+  .circle {
+    // z-index: 1;
+    position: absolute;
+    bottom: -25px;
+    right: -25px;
+    width: 50px;
+    height: 50px;
+    background-color: red;
+    border-radius: 50%;
+  }
+
+  // &::after {
+  //   // z-index: 1;
+  //   position: absolute;
+  //   bottom: -25px;
+  //   right: -25px;
+  //   width: 50px;
+  //   height: 50px;
+  //   content: '';
+  //   background-color: red;
+  //   border-radius: 50%;
+  // }
 }
 
 .scroll-wrapper {
@@ -241,9 +291,17 @@ div.buttons.has-addons {
   align-items: center;
 }
 
+.app-wrapper {
+  padding: 1em;
+}
+
 @media screen and (max-width: 768px) {
   .main {
     margin: 0;
+  }
+
+  .app-wrapper {
+    padding: 0;
   }
 
   .columns {
@@ -261,7 +319,7 @@ div.buttons.has-addons {
   }
 
   .viewer {
-    min-height: 700px;
+    min-height: 100vh;
   }
 
   .results {
@@ -274,6 +332,11 @@ div.buttons.has-addons {
         margin-right: auto;
       }
     }
+  }
+
+  .footer {
+    padding-top: 1.5em;
+    padding-bottom: 1em;
   }
 }
 

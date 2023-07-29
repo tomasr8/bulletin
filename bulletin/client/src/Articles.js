@@ -17,6 +17,30 @@ const articles = [
     issue: "28-29",
   },
   {
+    description: "First LEP break-through under the Jura",
+    path: "1984_45.pdf",
+    year: 1984,
+    issue: "45",
+  },
+  {
+    description: "A happy winner",
+    path: "1982_45.pdf",
+    year: 1982,
+    issue: "45",
+  },
+  {
+    description: "Quelle heure est-il?",
+    path: "1976_15.pdf",
+    year: 1976,
+    issue: "15",
+  },
+  {
+    description: "New CERN Courier: a real eyecatcher!",
+    path: "1998_45.pdf",
+    year: 1998,
+    issue: "45",
+  },
+  {
     description: "1979 is Silver Jubilee Year",
     path: "1979_1-2.pdf",
     year: 1979,
@@ -27,6 +51,12 @@ const articles = [
     path: "1994_23.pdf",
     year: 1994,
     issue: "23",
+  },
+  {
+    description: "Raindrops keep falling on my LEP",
+    path: "1994_45.pdf",
+    year: 1994,
+    issue: "45",
   },
 ];
 
@@ -92,8 +122,13 @@ function Search({ selectedArticle, setSelectedArticle }) {
                   <div>
                     <span
                       className={`tag is-medium ${
-                        selectedArticle === i ? "is-link" : "is-white"
+                        selectedArticle === i ? "" : "is-white"
                       } is-rounded`}
+                      style={
+                        selectedArticle === i
+                          ? { backgroundColor: "#8a8fa6", color: "white" }
+                          : {}
+                      }
                     >
                       {i + 1}
                     </span>
@@ -127,18 +162,20 @@ export default function Article() {
   const data = `${process.env.PUBLIC_URL}/articles/${path}`;
 
   return (
-    <div className="columns is-desktop main">
-      <div className="column is-4-desktop left-column">
-        <Search
-          selectedArticle={selectedArticle}
-          setSelectedArticle={setSelectedArticle}
-        />
-      </div>
-      <div className="column is-7-desktop">
-        <div className="viewer">
-          <object data={data} type="application/pdf">
-            Failed to load PDF
-          </object>
+    <div className="app-wrapper">
+      <div className="columns is-desktop main">
+        <div className="column is-4-desktop left-column">
+          <Search
+            selectedArticle={selectedArticle}
+            setSelectedArticle={setSelectedArticle}
+          />
+        </div>
+        <div className="column is-8-desktop">
+          <div className="viewer">
+            <object data={data} type="application/pdf">
+              Failed to load PDF
+            </object>
+          </div>
         </div>
       </div>
     </div>

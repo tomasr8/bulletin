@@ -1,16 +1,45 @@
+from pathlib import Path
+import json
+from string import ascii_lowercase
+
 from pypdf import PdfReader
 
 import matplotlib.pyplot as plt
 from wordcloud import WordCloud
 
 
-reader = PdfReader("01-1965.pdf")
-number_of_pages = len(reader.pages)
-page = reader.pages[1]
+fr_stopwords = json.loads(Path('fr.json').read_text(encoding='utf-8')) + [
+    'janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'jullet', 'aout', 'août', 'septembre',
+    'octobre', 'novembre', 'décembre',
+    'restaurant', 'cern', 'cern.', 'club', 'membre', 'lecture', 'mois', 'personnel'
+    'tél', 'tel', 'tél.', 'tel.', 'semaine', 'fr', 'date', 'lieu', 'prix', 'genève', 'meyrin', 'programme'
+]
+
+en_stopwords = json.loads(Path('fr.json').read_text(encoding='utf-8')) + [
+    'january', 'february', 'march', 'april', 'may', 'june', 'jully', 'august', 'september',
+    'october', 'november', 'december',
+    'place', 'weekly', 'bulletin', 'article',
+    'week', '-', 'will', 'staff', 'association', 'mr'
+]
+
+stopwords = fr_stopwords + en_stopwords + list(ascii_lowercase)
 
 text = ""
-for page in reader.pages:
-    text += "\n" + page.extract_text()
+for pdf in Path("bulletin/client/public/issues/1980").glob('*'):
+    reader = PdfReader(str(pdf))
+    page = reader.pages[1]
+
+    for page in reader.pages:
+        text += " " + page.extract_text()
+
+text = text.replace("\n", "")
+text = ' '.join([word for word in text.split(" ") if word.lower() not in stopwords])
+text = ' '.join([word for word in text.split(" ") if word])
+
+Path("out.txt").write_text(text)
+
+print(text.split(" "))
+
 # text = page.extract_text()
 # print(text)
 

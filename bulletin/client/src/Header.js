@@ -1,8 +1,11 @@
 import { Routes, Route, Link } from "react-router-dom";
 
 import { ReactComponent as Logo } from "./logo2.svg";
+import { useEffect, useState } from "react";
 
 export default function Header() {
+  const [isActive, setIsActive] = useState(false);
+
   return (
     <nav
       className="navbar nav is-dark"
@@ -13,20 +16,18 @@ export default function Header() {
         <Link to="/" className="navbar-item">
           <Logo style={{ width: 55 }} />
         </Link>
-
-        <a
-          role="button"
-          className="navbar-burger"
+        <button
+          className={`navbar-burger ${isActive ? "is-active" : ""}`}
           aria-label="menu"
-          aria-expanded="false"
-          data-target="navbarBasicExample"
+          aria-expanded={isActive}
+          onClick={() => setIsActive((v) => !v)}
         >
           <span aria-hidden="true"></span>
           <span aria-hidden="true"></span>
           <span aria-hidden="true"></span>
-        </a>
+        </button>
       </div>
-      <div id="navbarBasicExample" className="navbar-menu">
+      <div className={`navbar-menu ${isActive ? "is-active" : ""}`}>
         <div className="navbar-start">
           <Link to="/" className="navbar-item">
             Explore

@@ -9,15 +9,24 @@ import b7 from "./images/b7.png";
 import styles from "./Cover.module.scss";
 
 const images = [b1, b2, b3, b4, b5, b6, b7];
+const dates = [
+  "1965 - 1966",
+  "1966 - 1968",
+  "1968 - 1976",
+  "1976 - 200?",
+  "200? - 2014",
+  "2014 - 2022",
+  "2022 - ",
+];
 
 export default function Cover() {
   return (
     <div className={styles.wrapper}>
-      {images.map((image) => (
+      {images.map((image, i) => (
         <div key={image} className="block">
           <div className={`box ${styles["image-wrapper"]}`}>
             <div>
-              <span className="tag is-medium is-primary">1965 - 1966</span>
+              <span className="tag is-medium is-primary">{dates[i]}</span>
             </div>
             <img src={image} alt="" />
           </div>
