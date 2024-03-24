@@ -1,0 +1,15 @@
+.python-version
+__pycache__
+venv/
+*.egg-info
+
+node_modules/
+/bulletin/client/build
+
+*.css.map
+
+public/main.css
+
+.vscode/
+
+/issues

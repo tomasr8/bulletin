@@ -1,0 +1,40 @@
+[project]
+name = "bulletin"
+authors = [{ name = "Tomas Roun", email = "tomas.roun8@gmail.com" }]
+description = "CERN Bulletin Online Archive"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { file = "LICENSE" }
+dependencies = ["flask", "psycopg2-binary"]
+dynamic = ["version"]
+
+[project.optional-dependencies]
+dev = ["pytest", "ruff", "pre-commit", "pypdf", "requests"]
+
+[project.urls]
+Homepage = "https://github.com/tomasr8/bulletin"
+Github = "https://github.com/tomasr8/bulletin"
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = ["D"]
+
+[tool.ruff.lint.per-file-ignores]
+"bulletin/maintenance/*" = ["ANN001", "ANN201", "T201", "PLR2004", "S101"]
+
+[tool.ruff.lint.isort]
+lines-after-imports = 2
+
+[tool.setuptools.dynamic]
+version = { attr = "bulletin.__version__" }
+
+[tool.setuptools.packages.find]
+include = ["bulletin"]
+exclude = ["bulletin/client/node_modules", "bulletin/client/public"]
+
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
