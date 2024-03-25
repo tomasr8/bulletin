@@ -1,6 +1,6 @@
 ## CERN Bulletin Online Archive
 
-### Live website [here](https://sg1.cern.ch:9999)! (CERN network only)
+### Live website [here](https://cern.ch/bulletin-archive)! (CERN network only)
 
 ![](pic.png)
 
