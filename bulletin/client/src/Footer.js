@@ -57,7 +57,7 @@ export default function Footer() {
                   target="_blank"
                   rel="noreferrer"
                 >
-                  Github source
+                  GitHub source
                 </a>
               </div>
               <div>
@@ -90,7 +90,7 @@ export default function Footer() {
               <div>
                 <Link
                   href="https://github.com/tomasr8/bulletin"
-                  text="Github source"
+                  text="GitHub source"
                 />
               </div>
               <div>
