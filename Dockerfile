@@ -1,10 +1,7 @@
 # builder image
-# FROM python:3.12-slim AS builder
 FROM node:20-slim AS builder
 
 ADD . /build/
-
-# RUN ./install_node.sh
 
 WORKDIR /build/bulletin/client
 RUN npm ci
@@ -22,6 +19,8 @@ ADD . .
 
 COPY --from=builder /build/bulletin/client/build ./build
 
+# required packages for uwsgi to build
+RUN apt-get update && apt-get install -y libpcre3 libpcre3-dev gcc
 RUN pip install build
 RUN pip install .
 
