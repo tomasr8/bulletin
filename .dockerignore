@@ -1,0 +1,12 @@
+.git/
+.gitignore
+Dockerfile
+.dockerignore
+__pycache__/
+venv/
+*.egg-info
+
+bulletin/client/public/issues/
+bulletin/client/node_modules/
+bulletin/client/build
+

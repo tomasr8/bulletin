@@ -5,7 +5,7 @@ import psycopg2
 from flask import Flask, Response, jsonify, request
 
 
-conn = psycopg2.connect("dbname=bulletin")
+conn = psycopg2.connect("")
 atexit.register(lambda: conn.close())
 
 app = Flask(__name__)
