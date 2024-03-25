@@ -5,7 +5,7 @@ description = "CERN Bulletin Online Archive"
 readme = "README.md"
 requires-python = ">=3.11"
 license = { file = "LICENSE" }
-dependencies = ["flask", "psycopg2-binary"]
+dependencies = ["flask", "psycopg2-binary", "uwsgi"]
 dynamic = ["version"]
 
 [project.optional-dependencies]
