@@ -1,6 +1,6 @@
 ## CERN Bulletin Online Archive
 
-### Live website [here](https://cern.ch/bulletin-archive)! (CERN network only)
+### Live website [here](https://bulletin.app.cern.ch/)!
 
 ![](pic.png)
 
@@ -12,4 +12,4 @@
 
 ### The tech
 
-The app is built using Create React App and Python/flask. The full-text search is backed by Postgres (`ts_vector`/`ts_query`). The whole thing runs inside `uwsgi`.
+The app is built using Create React App and Python/flask. The full-text search is backed by Postgres (`ts_vector`/`ts_query`). The whole thing runs inside `uwsgi` which is in turn deployed on OpenShift.
