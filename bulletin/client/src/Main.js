@@ -2,6 +2,7 @@ import "./main.scss"
 
 import { useRef, useState } from "react"
 import issues from "./issues.json"
+import { isMobileChrome } from "./util"
 
 const years = Object.keys(issues).map(y => parseInt(y, 10))
 
@@ -258,6 +259,8 @@ function Search({
   const [expanded, setExpanded] = useState(true)
   const ref = useRef()
 
+  console.log("searchResults", searchResults)
+
   const onExpand = () => {
     if (expanded) {
       ref.current.style.height = `${ref.current.scrollHeight}px`
@@ -462,8 +465,6 @@ export default function Main() {
   const languageSuffix =
     selectedLanguage === "en-fr" ? "" : `_${selectedLanguage}`
   const data = `${process.env.PUBLIC_URL}/issues/${selectedYear}/${selectedIssue}${languageSuffix}.pdf?#page=${selectedPage}`
-  // const data = `${process.env.PUBLIC_URL}/issues_gs/${selectedYear}/${selectedIssue}${languageSuffix}.pdf_.pdf?#page=${selectedPage}`
-
 
   return (
     <div className="app-wrapper">
@@ -487,9 +488,15 @@ export default function Main() {
         </div>
         <div className="column is-8-desktop">
           <div className="viewer">
-            <object data={data} type="application/pdf">
-              Failed to load PDF
-            </object>
+            {isMobileChrome() ? (
+              <object data={`https://drive.google.com/viewerng/viewer?embedded=true&url=https://bulletin.app.cern.ch${data}`} type="application/pdf">
+                Failed to load PDF
+              </object>
+            ) : (
+              <object data={data} type="application/pdf">
+                Failed to load PDF
+              </object>
+            )}
           </div>
         </div>
       </div>
