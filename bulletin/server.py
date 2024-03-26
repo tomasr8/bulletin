@@ -1,12 +1,8 @@
-import atexit
 import time
 
 import psycopg2
 from flask import Flask, Response, jsonify, request
 
-
-conn = psycopg2.connect("")
-atexit.register(lambda: conn.close())
 
 app = Flask(__name__)
 
@@ -22,6 +18,7 @@ def search() -> Response:
 
 def fetch_results(q: str, offset: int) -> list[dict]:
     start = time.time()
+    conn = psycopg2.connect("")
 
     subquery_offset = max(offset - 5, 0)
     subquery_limit = offset + 5
@@ -34,18 +31,18 @@ def fetch_results(q: str, offset: int) -> list[dict]:
         results = cur.fetchall()
         results.sort(key=lambda r: -r[5])
 
-        app.logger.debug('query: "%s" took %fs', q, time.time() - start)
-
-        return [
-            {
-                "year": int(result[1]),
-                "issues": result[2].split("_")[0],
-                "page": result[3] + 1,
-                "language": result[4],
-                "headline": result[6],
-            }
-            for result in results
-        ][:5]
+    app.logger.debug('query: "%s" took %fs', q, time.time() - start)
+    conn.close()
+    return [
+        {
+            "year": int(result[1]),
+            "issues": result[2].split("_")[0],
+            "page": result[3] + 1,
+            "language": result[4],
+            "headline": result[6],
+        }
+        for result in results
+    ][:5]
 
 
 query = """\
