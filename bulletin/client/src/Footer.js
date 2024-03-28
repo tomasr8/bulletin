@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { Router, Link as RouterLink } from "react-router-dom"
 
 import { ReactComponent as Logo } from "./cern.svg"
 
@@ -69,6 +70,9 @@ export default function Footer() {
                   CERN CDS
                 </a>
               </div>
+              <div>
+                <RouterLink to="/disclaimer">Disclaimer</RouterLink>
+              </div>
             </div>
           </div>
           <div className="column is-2-desktop">
@@ -98,6 +102,9 @@ export default function Footer() {
                   href="https://cds.cern.ch/search?p=&action_search=H%C4%BEadaj&op1=a&m1=a&p1=&f1=&c=CERN+Bulletin+Issues&sf=year&so=a&rm=&rg=10&sc=0&of=hb"
                   text="CERN CDS"
                 />
+              </div>
+              <div>
+                <RouterLink to="/disclaimer">Disclaimer</RouterLink>
               </div>
             </div>
             <div>
