@@ -489,9 +489,13 @@ export default function Main() {
         <div className="column is-8-desktop">
           <div className="viewer">
             {isMobileChrome() ? (
-              <object data={`https://drive.google.com/viewerng/viewer?embedded=true&url=https://bulletin.app.cern.ch${data}`} type="application/pdf">
-                Failed to load PDF
-              </object>
+              <span style={{ marginTop: 20 }}>
+                Mobile Chrome does not support PDF viewing. Use Firefox or{" "}
+                <a href={`https://bulletin.app.cern.ch${data}`}>
+                  open the PDF with another application
+                </a>
+                .
+              </span>
             ) : (
               <object data={data} type="application/pdf">
                 Failed to load PDF
