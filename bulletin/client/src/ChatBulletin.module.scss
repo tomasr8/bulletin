@@ -1,0 +1,48 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  padding: 5em 15em;
+  margin: 0 auto;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.chat {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3em;
+}
+
+.question {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 10px;
+
+  & > div {
+    padding: 0.5em 1em;
+    background-color: orange;
+    border-radius: 10px;
+  }
+  // width: fit-content;
+}
+
+.answer {
+  display: flex;
+  padding: 1em;
+  gap: 1em;
+  align-items: flex-start;
+  background-color: white;
+  & > :global(.tag) {
+    background-color: unset;
+    white-space: unset;
+  }
+  border-radius: 10px;
+}
+
+@media screen and (max-width: 768px) {
+  .wrapper {
+    padding: 1em;
+  }
+}

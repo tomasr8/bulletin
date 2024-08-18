@@ -38,6 +38,9 @@ export default function Header() {
           <Link to="/articles" className="navbar-item">
             Featured articles
           </Link>
+          <Link to="/chat" className="navbar-item">
+            Chat with the Bulletin
+          </Link>
         </div>
       </div>
     </nav>

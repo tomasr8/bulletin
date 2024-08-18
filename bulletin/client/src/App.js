@@ -8,6 +8,8 @@ import Footer from "./Footer"
 import Disclaimer from "./Disclaimer"
 import Cover from "./Cover"
 import Article from "./Articles"
+import ChatBulletin from "./ChatBulletin"
+
 
 function App() {
   return (
@@ -18,6 +20,7 @@ function App() {
         <Route path="covers" element={<Cover />} />
         <Route path="articles" element={<Article />} />
         <Route path="disclaimer" element={<Disclaimer />} />
+        <Route path="chat" element={<ChatBulletin />} />
       </Routes>
       <Footer />
     </>

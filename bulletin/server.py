@@ -2,7 +2,7 @@ import time
 
 import psycopg2
 from flask import Flask, Response, jsonify, request
-
+from bulletin.rag.embed import get_answer
 
 app = Flask(__name__)
 
@@ -15,6 +15,13 @@ def search() -> Response:
     offset = int(request.args.get("offset", 0))
     return jsonify(fetch_results(q, offset))
 
+
+@app.route("/api/chat", methods=["POST"])
+def chat():
+    question = request.json.get("message")
+    answer = get_answer(question)
+
+    return jsonify({"text": answer})
 
 def fetch_results(q: str, offset: int) -> list[dict]:
     start = time.time()
