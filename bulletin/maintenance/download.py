@@ -110,6 +110,17 @@ def get_links(base, year, issues):
         yield f"{base}/{filename}", path
 
 
+def get_links_known(links, year, issues):
+    if year < 2009:
+        path = get_storage_path(year, issues)
+        yield links["en-fr"], path
+    else:
+        path = get_storage_path(year, issues, ext="_en.pdf")
+        yield links["en"], path
+        path = get_storage_path(year, issues, ext="_fr.pdf")
+        yield links["fr"], path
+
+
 def get_storage_path(year, issues, *, ext=".pdf"):
     if len(issues) == 1:
         return f"{year}/{issues[0]}{ext}"
@@ -120,7 +131,7 @@ def process(data):  # noqa: C901, PLR0912
     duplicates = set()
 
     all_issues = []
-    for title, base in data:
+    for title, base, *rest in data:
         for year, issues in parse_title(title):
             assert len(issues) > 0
             assert (year, issues) not in duplicates
@@ -128,7 +139,9 @@ def process(data):  # noqa: C901, PLR0912
             duplicates.add((year, issues))
             all_issues.append((year, issues))
 
-            for link, file_path in get_links(base, year, issues):
+            links = get_links_known(rest[0], year, issues) if rest else get_links(base, year, issues)
+
+            for link, file_path in links:
                 print(link, file_path)
                 pdf = requests.get(link).content  # noqa: S113
                 path = ISSUES / file_path
@@ -176,9 +189,9 @@ def process(data):  # noqa: C901, PLR0912
                 else:
                     processed_issues[year]["fr"].append({"issue": issue, "exists": True})
 
-    (Path(__file__).parent / "issues-processed.json").write_text(json.dumps(processed_issues))
+    (Path(__file__).parent / "issues-processed-2.json").write_text(json.dumps(processed_issues))
 
 
 if __name__ == "__main__":
-    data = json.loads((Path(__file__).parent / "issues-raw.json").read_text())
+    data = json.loads((Path(__file__).parent / "issues-raw-2.json").read_text())
     process(data)

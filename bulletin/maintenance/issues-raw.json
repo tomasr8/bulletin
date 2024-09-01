@@ -558,7 +558,11 @@
   ["CERN Bulletin Issue No. 49/1975", "http://cds.cern.ch/record/1717320"],
   ["CERN Bulletin Issue No. 50/1975", "http://cds.cern.ch/record/1717327"],
   ["CERN Bulletin Issue No. 51/1975", "http://cds.cern.ch/record/1717334"],
-  ["CERN Bulletin Issue No. 52/1975", "http://cds.cern.ch/record/1717341"],
+  [
+    "CERN Bulletin Issue No. 52/1975 & 1-2/1976",
+    "http://cds.cern.ch/record/1717341",
+    { "en-fr": "http://cds.cern.ch/record/1717341/files/52-1975.pdf" }
+  ],
   ["CERN Bulletin Issue No. 3/1976", "http://cds.cern.ch/record/1717349"],
   ["CERN Bulletin Issue No. 4/1976", "http://cds.cern.ch/record/1717357"],
   ["CERN Bulletin Issue No. 5/1976", "http://cds.cern.ch/record/1717364"],
@@ -609,7 +613,11 @@
   ["CERN Bulletin Issue No. 50/1976", "http://cds.cern.ch/record/1717725"],
   ["CERN Bulletin Issue No. 51/1976", "http://cds.cern.ch/record/1717734"],
   ["CERN Bulletin Issue No. 52/1976", "http://cds.cern.ch/record/1717744"],
-  ["CERN Bulletin Issue No. 53/1976", "http://cds.cern.ch/record/1717751"],
+  [
+    "CERN Bulletin Issue No. 53/1976 & 1/1977",
+    "http://cds.cern.ch/record/1717751",
+    { "en-fr": "http://cds.cern.ch/record/1717751/files/53-1976.pdf" }
+  ],
   ["CERN Bulletin Issue No. 2/1977", "http://cds.cern.ch/record/1717761"],
   ["CERN Bulletin Issue No. 3/1977", "http://cds.cern.ch/record/1717771"],
   ["CERN Bulletin Issue No. 4/1977", "http://cds.cern.ch/record/1717781"],
@@ -1797,8 +1805,10 @@
   ["CERN Bulletin Issue No. 45-46/2009", "http://cds.cern.ch/record/1371905"],
   ["CERN Bulletin Issue No. 47-48/2009", "http://cds.cern.ch/record/1371902"],
   ["CERN Bulletin Issue No. 49-50/2009", "http://cds.cern.ch/record/1371896"],
-  ["CERN Bulletin Issue No. 51-52/2009", "http://cds.cern.ch/record/1371894"],
-
+  [
+    "CERN Bulletin Issue No. 51-52/2009 & 1/2010",
+    "http://cds.cern.ch/record/1371894"
+  ],
   ["CERN Bulletin Issue No. 02-03/2010", "http://cds.cern.ch/record/1371778"],
   ["CERN Bulletin Issue No. 04-05/2010", "http://cds.cern.ch/record/1371774"],
   ["CERN Bulletin Issue No. 08-09/2010", "http://cds.cern.ch/record/1371757"],
@@ -1978,8 +1988,12 @@
   ["CERN Bulletin Issue No. 48-49/2016", "http://cds.cern.ch/record/2682877"],
   ["CERN Bulletin Issue No. 50-51/2016", "http://cds.cern.ch/record/2683526"],
   [
-    "CERN Bulletin Issue No. 52/2016 & 01-02/2017",
-    "http://cds.cern.ch/record/2683527"
+    "CERN Bulletin Issue No. 52/2016 & 01-04/2017",
+    "http://cds.cern.ch/record/2683527",
+    {
+      "en": "http://cds.cern.ch/record/2683527/files/2017-52-04-E-web.pdf",
+      "fr": "http://cds.cern.ch/record/2683527/files/2017-52-04-F-web.pdf"
+    }
   ],
   ["CERN Bulletin Issue No. 05-06/2017", "http://cds.cern.ch/record/2683528"],
   ["CERN Bulletin Issue No. 07-08/2017", "http://cds.cern.ch/record/2683529"],

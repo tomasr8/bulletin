@@ -597,7 +597,7 @@
   },
   "1976": {
     "en-fr": [
-      { "issue": [1, 2], "exists": false },
+      { "issue": [1, 2], "exists": true },
       { "issue": [3], "exists": true },
       { "issue": [4], "exists": true },
       { "issue": [5], "exists": true },
@@ -653,7 +653,7 @@
   },
   "1977": {
     "en-fr": [
-      { "issue": [1], "exists": false },
+      { "issue": [1], "exists": true },
       { "issue": [2], "exists": true },
       { "issue": [3], "exists": true },
       { "issue": [4], "exists": true },
@@ -2327,8 +2327,7 @@
   },
   "2017": {
     "en": [
-      { "issue": [1, 2], "exists": false },
-      { "issue": [3, 4], "exists": false },
+      { "issue": [1, 4], "exists": true },
       { "issue": [5, 6], "exists": true },
       { "issue": [7, 8], "exists": true },
       { "issue": [9, 10], "exists": true },
@@ -2353,8 +2352,7 @@
       { "issue": [49, 50, 51], "exists": true }
     ],
     "fr": [
-      { "issue": [1, 2], "exists": false },
-      { "issue": [3, 4], "exists": false },
+      { "issue": [1, 4], "exists": true },
       { "issue": [5, 6], "exists": true },
       { "issue": [7, 8], "exists": true },
       { "issue": [9, 10], "exists": true },
