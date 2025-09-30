@@ -120,7 +120,7 @@ def process(data):  # noqa: C901, PLR0912
     duplicates = set()
 
     all_issues = []
-    for title, base in data:
+    for title, base, *_ in data:
         for year, issues in parse_title(title):
             assert len(issues) > 0
             assert (year, issues) not in duplicates
@@ -130,12 +130,13 @@ def process(data):  # noqa: C901, PLR0912
 
             for link, file_path in get_links(base, year, issues):
                 print(link, file_path)
-                pdf = requests.get(link).content  # noqa: S113
                 path = ISSUES / file_path
                 path.parent.mkdir(parents=True, exist_ok=True)
-                path.write_bytes(pdf)
-                time.sleep(1)
-                print("done")
+                if not path.exists():
+                    pdf = requests.get(link).content  # noqa: S113
+                    path.write_bytes(pdf)
+                    time.sleep(1)
+                    print("done")
 
     issues_by_year = defaultdict(list)
     for year, issues in all_issues:
