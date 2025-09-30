@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html  lang="en" dir="ltr" prefix="content: http://purl.org/rss/1.0/modules/content/  dc: http://purl.org/dc/terms/  foaf: http://xmlns.com/foaf/0.1/  og: http://ogp.me/ns#  rdfs: http://www.w3.org/2000/01/rdf-schema#  schema: http://schema.org/  sioc: http://rdfs.org/sioc/ns#  sioct: http://rdfs.org/sioc/types#  skos: http://www.w3.org/2004/02/skos/core#  xsd: http://www.w3.org/2001/XMLSchema# ">
+  <head>
+    <meta charset="utf-8" />
+<script>var _paq = _paq || [];(function(){var u=(("https:" == document.location.protocol) ? "https://piwik.web.cern.ch/" : "http://piwik.web.cern.ch/");_paq.push(["setSiteId", "6779"]);_paq.push(["setTrackerUrl", u+"matomo.php"]);_paq.push(["setDocumentTitle", "404/URL = " + encodeURIComponent(document.location.pathname+document.location.search) + "/From = " + encodeURIComponent(document.referrer)]);_paq.push(["setDoNotTrack", 1]);_paq.push(["trackPageView"]);_paq.push(["setIgnoreClasses", ["no-tracking","colorbox"]]);_paq.push(["enableLinkTracking"]);var d=document,g=d.createElement("script"),s=d.getElementsByTagName("script")[0];g.type="text/javascript";g.defer=true;g.async=true;g.src=u+"matomo.js";s.parentNode.insertBefore(g,s);})();</script>
+<meta name="Generator" content="Drupal 9 (https://www.drupal.org)" />
+<meta name="MobileOptimized" content="width" />
+<meta name="HandheldFriendly" content="true" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="icon" href="/themes/custom/cern-theme/favicon.ico" type="image/vnd.microsoft.icon" />
+
+    <title>Page not found | CERN Newsletter Service</title>
+    <link rel="stylesheet" media="all" href="/core/modules/system/css/components/align.module.css?rexdpq" />
+<link rel="stylesheet" media="all" href="/core/modules/system/css/components/fieldgroup.module.css?rexdpq" />
+<link rel="stylesheet" media="all" href="/core/modules/system/css/components/container-inline.module.css?rexdpq" />
+<link rel="stylesheet" media="all" href="/core/modules/system/css/components/clearfix.module.css?rexdpq" />
+<link rel="stylesheet" media="all" href="/core/modules/system/css/components/details.module.css?rexdpq" />
+<link rel="stylesheet" media="all" href="/core/modules/system/css/components/hidden.module.css?rexdpq" />
+<link rel="stylesheet" media="all" href="/core/modules/system/css/components/item-list.module.css?rexdpq" />
+<link rel="stylesheet" media="all" href="/core/modules/system/css/components/js.module.css?rexdpq" />
+<link rel="stylesheet" media="all" href="/core/modules/system/css/components/nowrap.module.css?rexdpq" />
+<link rel="stylesheet" media="all" href="/core/modules/system/css/components/position-container.module.css?rexdpq" />
+<link rel="stylesheet" media="all" href="/core/modules/system/css/components/progress.module.css?rexdpq" />
+<link rel="stylesheet" media="all" href="/core/modules/system/css/components/reset-appearance.module.css?rexdpq" />
+<link rel="stylesheet" media="all" href="/core/modules/system/css/components/resize.module.css?rexdpq" />
+<link rel="stylesheet" media="all" href="/core/modules/system/css/components/sticky-header.module.css?rexdpq" />
+<link rel="stylesheet" media="all" href="/core/modules/system/css/components/system-status-counter.css?rexdpq" />
+<link rel="stylesheet" media="all" href="/core/modules/system/css/components/system-status-report-counters.css?rexdpq" />
+<link rel="stylesheet" media="all" href="/core/modules/system/css/components/system-status-report-general-info.css?rexdpq" />
+<link rel="stylesheet" media="all" href="/core/modules/system/css/components/tablesort.module.css?rexdpq" />
+<link rel="stylesheet" media="all" href="/core/modules/system/css/components/tree-child.module.css?rexdpq" />
+<link rel="stylesheet" media="all" href="/modules/custom/cern-toolbar/assets/css/screen.css?rexdpq" />
+<link rel="stylesheet" media="all" href="/modules/custom/cern-toolbar/assets/css/cookieconsent.css?rexdpq" />
+<link rel="stylesheet" media="all" href="/themes/custom/cern-base-theme/css/base.css?rexdpq" />
+<link rel="stylesheet" media="all" href="/sites/default/files/color/cernclean-0ee5caf0/colors.css?rexdpq" />
+<link rel="stylesheet" media="all" href="/themes/custom/cern-base-theme/css/layout.css?rexdpq" />
+<link rel="stylesheet" media="all" href="//framework.web.cern.ch/framework/3.0/js/prism/prism.css" />
+<link rel="stylesheet" media="all" href="/themes/custom/cern-base-theme/css/components/footer.css?rexdpq" />
+<link rel="stylesheet" media="all" href="/themes/custom/cern-base-theme/css/components/header.css?rexdpq" />
+<link rel="stylesheet" media="all" href="/themes/custom/cern-base-theme/css/components/pagination.css?rexdpq" />
+<link rel="stylesheet" media="all" href="/themes/custom/cern-base-theme/css/components/forms.css?rexdpq" />
+<link rel="stylesheet" media="all" href="/themes/custom/cern-base-theme/css/components/fields.css?rexdpq" />
+<link rel="stylesheet" media="all" href="/themes/custom/cern-base-theme/css/components/dropdown.css?rexdpq" />
+<link rel="stylesheet" media="all" href="/themes/custom/cern-base-theme/css/components/progress.css?rexdpq" />
+<link rel="stylesheet" media="all" href="/themes/custom/cern-base-theme/css/components/accordion.css?rexdpq" />
+<link rel="stylesheet" media="all" href="/themes/custom/cern-base-theme/css/components/social-sharing.css?rexdpq" />
+<link rel="stylesheet" media="all" href="//framework.web.cern.ch/framework/3.0/js/colorbox/colorbox.css" />
+<link rel="stylesheet" media="all" href="/themes/custom/cern-base-theme/css/theme.css?rexdpq" />
+<link rel="stylesheet" media="all" href="/themes/custom/cern-base-theme/css/cookies.css?rexdpq" />
+<link rel="stylesheet" media="all" href="/themes/custom/cern-base-theme/css/viewspage.css?rexdpq" />
+<link rel="stylesheet" media="all" href="/themes/custom/cern-base-theme/css/views/faq-views.css?rexdpq" />
+<link rel="stylesheet" media="all" href="/themes/custom/cern-base-theme/css/views/agenda-views.css?rexdpq" />
+<link rel="stylesheet" media="all" href="/themes/custom/cern-base-theme/css/views/news-views.css?rexdpq" />
+<link rel="stylesheet" media="all" href="/themes/custom/cern-base-theme/css/views/stories-views.css?rexdpq" />
+<link rel="stylesheet" media="all" href="/themes/custom/cern-base-theme/css/views/resources-views.css?rexdpq" />
+<link rel="stylesheet" media="all" href="/themes/custom/cern-base-theme/css/views/taxonomies-views.css?rexdpq" />
+<link rel="stylesheet" media="all" href="/themes/custom/cern-base-theme/css/views/search-views.css?rexdpq" />
+<link rel="stylesheet" media="all" href="/themes/custom/cern-base-theme/css/views/common-views.css?rexdpq" />
+<link rel="stylesheet" media="all" href="/themes/custom/cern-base-theme/css/views/generic-views.css?rexdpq" />
+<link rel="stylesheet" media="all" href="/themes/custom/cern-theme/css/header.css?rexdpq" />
+<link rel="stylesheet" media="all" href="/themes/custom/cern-theme/css/layout.css?rexdpq" />
+<link rel="stylesheet" media="all" href="/themes/custom/cern-theme/css/common-views.css?rexdpq" />
+<link rel="stylesheet" media="all" href="/themes/custom/cern-theme/css/fields.css?rexdpq" />
+<link rel="stylesheet" media="all" href="/themes/custom/cern-theme/css/forms.css?rexdpq" />
+<link rel="stylesheet" media="all" href="/themes/custom/cern-theme/css/views.css?rexdpq" />
+<link rel="stylesheet" media="all" href="/themes/custom/cern-theme/css/blocks.css?rexdpq" />
+<link rel="stylesheet" media="all" href="/themes/custom/cern-theme/css/comments.css?rexdpq" />
+
+    
+          <link rel="preload" href="//framework.web.cern.ch/framework/3.0/images/loader.gif" as="image">
+      </head>
+  <body class="cern-theme-on path-sites has-glyphicons">
+        <a href="#main-content" class="visually-hidden focusable skip-link">
+      Skip to main content
+    </a>
+    <div  id="cern-toolbar" role="group" aria-label="CERN Toolbar" class="user-not-authenticated">
+    <h1>
+        <a href="//home.cern" title="CERN">
+            CERN
+            <span>Accelerating science</span>
+        </a>
+    </h1>
+    <ul>
+        <li class="signin"> 
+                                                     
+                                        <div class="item-list item-list-length-1">
+                <ul class="cern-signedin toolbar-submenu"><li class="cern-account-links"><a href="/user/login" class="cern-account cern-signin cern-single-mobile-signin">Sign in</a></li></ul>
+            </div>
+        </li>
+        <li><a href="//cern.ch/directory" class="cern-directory" title="Search CERN resources and browse the directory">Directory</a></li>
+    </ul>
+</div>
+
+      <div class="dialog-off-canvas-main-canvas" data-off-canvas-main-canvas>
+    
+
+
+
+
+
+    
+<div class="container-fluid">
+	
+</div>
+
+<header  role="banner">
+
+  <div class="header-wrapper">
+
+		    											<div class="site-info col-sm-3">
+			
+        					<div class="site-info__logo col-lg-12 col-md-12 col-sm-12">
+            <a href="/" title="Home" rel="home">
+              <img src="/sites/default/files/logo/PngItem_328726.png" alt="home"/>
+            </a>
+          </div>
+        
+				
+
+      </div>
+
+    
+		    
+									<div class="site-nav col-sm-9 ">
+			
+          <div class="region region-header">
+    <nav role="navigation" aria-labelledby="block-cernclean-main-menu-menu" id="block-cernclean-main-menu">
+            <h2 class="sr-only" id="block-cernclean-main-menu-menu">Main navigation</h2>
+
+      <nav class="navbar navbar-default main-menu">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+
+            
+                                                                            <ul class="nav navbar-nav">
+                                                                        <li>
+                        <a href="/" data-drupal-link-system-path="&lt;front&gt;">Home</a>
+                                                            </li>
+
+                    
+                                                            <li>
+                        <a href="/newsletter-archive" data-drupal-link-system-path="newsletter-archive">Newsletter Archive</a>
+                                                            </li>
+
+                    
+                                                            <li>
+                        <a href="/newsletters" data-drupal-link-system-path="newsletters">Subscriptions Manager</a>
+                                                            </li>
+
+                    
+                                                            <li>
+                        <a href="/subscriptions" data-drupal-link-system-path="subscriptions">My subscriptions</a>
+                                                            </li>
+
+                    
+                                                            <li>
+                        <a href="/unpublished-newsletters" data-drupal-link-system-path="unpublished-newsletters">Newsletters for Approval</a>
+                                                            </li>
+
+                    
+                                                        <li class="dropdown">
+
+                        
+                        <a href="/" class="dropdown-toggle" data-drupal-link-system-path="&lt;front&gt;">                            Reports
+                            <span class="caret"></span>
+                        </a>
+                                                                                                                                            <ul class="dropdown-menu">
+                                                                        <li>
+                        <a href="/missingpdf" data-drupal-link-system-path="missingpdf">Problematic Issues</a>
+                                                            </li>
+
+                    
+                                </ul>
+                                
+                                        </li>
+
+                    
+                                </ul>
+                                
+
+            
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container-fluid -->
+</nav>
+
+  </nav>
+
+  </div>
+
+      </div>
+    
+  </div>
+
+</div>
+
+</header>
+
+<main role="main">
+	<a id="main-content" tabindex="-1"></a>
+					<div class="container">
+				<div class="wrapper-center col-md-12 col-sm-12 col-xs-12">
+			  <div class="region region-content">
+    <div data-drupal-messages-fallback class="hidden"></div>
+    <h1 class="page-header">Page not found</h1>
+
+  The requested page could not be found.
+
+  </div>
+
+		</div>
+			</div>
+	</main>
+
+<footer role="contentinfo">
+<div class="row cern-footer">
+				<div class="col-xs-12 col-sm-3 col-md-3 col-lg-3 footer-first-col">
+				
+	  </div>
+  <div class="col-xs-12 col-sm-8 col-md-8 col-lg-8 footer-second-col">
+    <div class="row">
+      <!-- CONTACT US -->
+      <div class="col-sm-5 col-md-4 col-md-offset-0 col-lg-4 col-lg-offset-0">
+              </div>
+      <!-- general info -->
+      <div class="col-sm-6 col-sm-offset-1 col-md-4 col-md-offset-0 col-lg-4">
+        <div class=" mb-4">
+                      
+                  </div>
+      </div>
+      <!-- cern and you -->
+      <div class="col-sm-6 col-sm-offset-6 col-md-4 col-md-offset-0 col-lg-4  col-lg-offset-0">
+        <div class=" mb-4">
+                      
+                  </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1 footer-last-logo">
+
+          <a href="https://home.cern/" title="CERN" target="_blank"><img src="/themes/custom/cern-theme/logo.svg" alt="CERN"/></a>
+    
+  </div>
+</div>
+
+  <div class="copy-wrapper light">
+  <a href="https://copyright.web.cern.ch/">
+    Copyright
+  </a>
+  &nbsp;&copy;
+  2022
+  CERN</div>
+</footer>
+
+  </div>
+
+    
+    <script type="application/json" data-drupal-selector="drupal-settings-json">{"path":{"baseUrl":"\/","scriptPath":null,"pathPrefix":"","currentPath":"","currentPathIsAdmin":false,"isFront":false,"currentLanguage":"en"},"pluralDelimiter":"\u0003","suppressDeprecationErrors":true,"ajaxPageState":{"libraries":"bootstrap\/popover,bootstrap\/tooltip,cern_toolbar\/cern_toolbar,cernbase\/global-styling,cernclean\/global-styling,matomo\/matomo,system\/base","theme":"cernclean","theme_token":null},"ajaxTrustedUrl":[],"matomo":{"disableCookies":false,"trackMailto":true},"bootstrap":{"forms_has_error_value_toggle":1,"modal_animation":1,"modal_backdrop":"true","modal_focus_input":1,"modal_keyboard":1,"modal_select_text":1,"modal_show":1,"modal_size":"","popover_enabled":1,"popover_animation":1,"popover_auto_close":1,"popover_container":"body","popover_content":"","popover_delay":"0","popover_html":0,"popover_placement":"right","popover_selector":"","popover_title":"","popover_trigger":"click","tooltip_enabled":1,"tooltip_animation":1,"tooltip_container":"body","tooltip_delay":"0","tooltip_html":0,"tooltip_placement":"auto left","tooltip_selector":"","tooltip_trigger":"hover"},"user":{"uid":0,"permissionsHash":"b6a7f0eddf2d70fb4e3314e7dbefaf7360436876533fd2f515a704a956ba17d3"}}</script>
+<script src="/core/assets/vendor/jquery/jquery.min.js?v=3.6.0"></script>
+<script src="/core/misc/polyfills/element.matches.js?v=9.3.12"></script>
+<script src="/core/misc/polyfills/object.assign.js?v=9.3.12"></script>
+<script src="/core/assets/vendor/css-escape/css.escape.js?v=1.5.1"></script>
+<script src="/core/assets/vendor/underscore/underscore-min.js?v=1.13.2"></script>
+<script src="/core/assets/vendor/once/once.min.js?v=1.0.1"></script>
+<script src="/core/assets/vendor/jquery-once/jquery.once.min.js?v=2.2.3"></script>
+<script src="/core/misc/drupalSettingsLoader.js?v=9.3.12"></script>
+<script src="/core/misc/drupal.js?v=9.3.12"></script>
+<script src="/core/misc/drupal.init.js?v=9.3.12"></script>
+<script src="/core/assets/vendor/tabbable/index.umd.min.js?v=5.2.1"></script>
+<script src="/modules/contrib/matomo/js/matomo.js?v=9.3.12"></script>
+<script src="/core/misc/progress.js?v=9.3.12"></script>
+<script src="/themes/contrib/bootstrap/js/misc/progress.js?rexdpq"></script>
+<script src="/core/misc/jquery.once.bc.js?v=9.3.12"></script>
+<script src="/core/misc/ajax.js?v=9.3.12"></script>
+<script src="/themes/contrib/bootstrap/js/misc/ajax.js?rexdpq"></script>
+<script src="//framework.web.cern.ch/framework/3.0/js/prism/prism.js"></script>
+<script src="/themes/custom/cern-base-theme/js/cernbase.js?rexdpq"></script>
+<script src="/themes/custom/cern-base-theme/js/components/social-sharing.js?rexdpq"></script>
+<script src="/themes/custom/cern-base-theme/js/components/footer.js?rexdpq"></script>
+<script src="/themes/custom/cern-base-theme/js/views/agenda-views.js?rexdpq"></script>
+<script src="/themes/custom/cern-base-theme/js/views/faq-views.js?rexdpq"></script>
+<script src="/themes/custom/cern-base-theme/js/views/news-views.js?rexdpq"></script>
+<script src="/themes/custom/cern-base-theme/js/views/resources-views.js?rexdpq"></script>
+<script src="/themes/custom/cern-base-theme/js/views/stories-views.js?rexdpq"></script>
+<script src="/themes/custom/cern-base-theme/js/views/taxonomies-views.js?rexdpq"></script>
+<script src="/themes/custom/cern-base-theme/js/views/search-views.js?rexdpq"></script>
+<script src="/themes/custom/cern-base-theme/js/views/common-views.js?rexdpq"></script>
+<script src="/themes/custom/cern-base-theme/js/box-effects.js?rexdpq"></script>
+<script src="//framework.web.cern.ch/framework/3.0/js/colorbox/jquery.colorbox-min.js"></script>
+<script src="//framework.web.cern.ch/framework/3.0/js/scroll-magic/ScrollMagic.min.js"></script>
+<script src="//framework.web.cern.ch/framework/3.0/js/scroll-magic/text-effects.js"></script>
+<script src="/themes/custom/cern-base-theme/sass/bootstrap/javascripts/bootstrap.min.js?rexdpq"></script>
+<script src="/themes/contrib/bootstrap/js/drupal.bootstrap.js?rexdpq"></script>
+<script src="/themes/contrib/bootstrap/js/attributes.js?rexdpq"></script>
+<script src="/themes/contrib/bootstrap/js/theme.js?rexdpq"></script>
+<script src="/themes/custom/cern-theme/js/anchor-fix.js?rexdpq"></script>
+<script src="/themes/custom/cern-theme/js/cernclean.js?rexdpq"></script>
+<script src="/themes/contrib/bootstrap/js/popover.js?rexdpq"></script>
+<script src="/themes/contrib/bootstrap/js/tooltip.js?rexdpq"></script>
+<script src="/modules/custom/cern-toolbar/assets/js/cern_toolbar.js?v=1.x"></script>
+
+  </body>
+</html>
