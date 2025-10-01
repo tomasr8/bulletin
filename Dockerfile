@@ -20,7 +20,7 @@ ADD . .
 COPY --from=builder /build/bulletin/client/build ./build
 
 # required packages for uwsgi to build
-RUN apt-get update && apt-get install -y libpcre3 gcc
+RUN apt-get update && apt-get install -y libpcre3 libpcre3-dev gcc
 # For oc rsync
 RUN apt-get install -y rsync
 RUN pip install build
