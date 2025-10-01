@@ -1,5 +1,5 @@
 # builder image
-FROM node:20-slim AS builder
+FROM node:24-slim AS builder
 
 ADD . /build/
 
@@ -7,7 +7,7 @@ WORKDIR /build/bulletin/client
 RUN npm ci
 RUN npm run build
 
-FROM python:3.12-slim
+FROM python:3.12.11-slim-bookworm
 
 # create an unprivileged user to run as
 RUN set -ex && \
@@ -20,7 +20,7 @@ ADD . .
 COPY --from=builder /build/bulletin/client/build ./build
 
 # required packages for uwsgi to build
-RUN apt-get update && apt-get install -y libpcre3 libpcre3-dev gcc
+RUN apt-get update && apt-get install -y libpcre3 gcc
 # For oc rsync
 RUN apt-get install -y rsync
 RUN pip install build
